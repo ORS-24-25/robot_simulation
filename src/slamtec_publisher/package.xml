@@ -3,7 +3,7 @@
 <package format="3">
   <name>slamtec_publisher</name>
   <version>0.0.0</version>
-  <description>TODO: Package description</description>
+  <description>Package that deals with all interactions with SLAMTEC M2M2 Mapper</description>
   <maintainer email="samirdstevenson@gmail.com">sstevenson</maintainer>
   <license>Apache-2.0</license>
 
