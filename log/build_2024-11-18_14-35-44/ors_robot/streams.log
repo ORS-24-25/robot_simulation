@@ -1,0 +1,36 @@
+[0.498s] Invoking command in '/home/ebajit3/ors_ws/build/ors_robot': PYTHONPATH=/home/ebajit3/ors_ws/build/ors_robot/prefix_override:/usr/lib/python3/dist-packages/colcon_core/task/python/colcon_distutils_commands:/home/ebajit3/ors_ws/install/ors_robot/lib/python3.10/site-packages:${PYTHONPATH} /usr/bin/python3 -W ignore:setup.py install is deprecated setup.py develop --editable --build-directory /home/ebajit3/ors_ws/build/ors_robot/build --no-deps symlink_data
+[0.714s] running develop
+[0.831s] running egg_info
+[0.831s] creating ors_robot.egg-info
+[0.831s] writing ors_robot.egg-info/PKG-INFO
+[0.831s] writing dependency_links to ors_robot.egg-info/dependency_links.txt
+[0.831s] writing entry points to ors_robot.egg-info/entry_points.txt
+[0.831s] writing requirements to ors_robot.egg-info/requires.txt
+[0.831s] writing top-level names to ors_robot.egg-info/top_level.txt
+[0.831s] writing manifest file 'ors_robot.egg-info/SOURCES.txt'
+[0.832s] reading manifest file 'ors_robot.egg-info/SOURCES.txt'
+[0.832s] writing manifest file 'ors_robot.egg-info/SOURCES.txt'
+[0.833s] running build_ext
+[0.834s] Creating /home/ebajit3/ors_ws/install/ors_robot/lib/python3.10/site-packages/ors-robot.egg-link (link to .)
+[0.835s] 
+[0.835s] Installed /home/ebajit3/ors_ws/build/ors_robot
+[0.835s] running symlink_data
+[0.835s] creating /home/ebajit3/ors_ws/install/ors_robot/share/ament_index
+[0.835s] creating /home/ebajit3/ors_ws/install/ors_robot/share/ament_index/resource_index
+[0.835s] creating /home/ebajit3/ors_ws/install/ors_robot/share/ament_index/resource_index/packages
+[0.835s] symbolically linking /home/ebajit3/ors_ws/build/ors_robot/resource/ors_robot -> /home/ebajit3/ors_ws/install/ors_robot/share/ament_index/resource_index/packages
+[0.836s] symbolically linking /home/ebajit3/ors_ws/build/ors_robot/package.xml -> /home/ebajit3/ors_ws/install/ors_robot/share/ors_robot
+[0.836s] creating /home/ebajit3/ors_ws/install/ors_robot/share/ors_robot/launch
+[0.836s] symbolically linking /home/ebajit3/ors_ws/build/ors_robot/launch/rsp_sim.launch.py -> /home/ebajit3/ors_ws/install/ors_robot/share/ors_robot/launch
+[0.836s] creating /home/ebajit3/ors_ws/install/ors_robot/share/ors_robot/urdf
+[0.836s] symbolically linking /home/ebajit3/ors_ws/build/ors_robot/urdf/Robot_Base.urdf -> /home/ebajit3/ors_ws/install/ors_robot/share/ors_robot/urdf
+[0.836s] symbolically linking /home/ebajit3/ors_ws/build/ors_robot/urdf/robot_base.xacro -> /home/ebajit3/ors_ws/install/ors_robot/share/ors_robot/urdf
+[0.836s] creating /home/ebajit3/ors_ws/install/ors_robot/share/ors_robot/meshes
+[0.836s] symbolically linking /home/ebajit3/ors_ws/build/ors_robot/meshes/depth_cam.STL -> /home/ebajit3/ors_ws/install/ors_robot/share/ors_robot/meshes
+[0.836s] symbolically linking /home/ebajit3/ors_ws/build/ors_robot/meshes/base_link.STL -> /home/ebajit3/ors_ws/install/ors_robot/share/ors_robot/meshes
+[0.836s] symbolically linking /home/ebajit3/ors_ws/build/ors_robot/meshes/front_wheel.STL -> /home/ebajit3/ors_ws/install/ors_robot/share/ors_robot/meshes
+[0.836s] symbolically linking /home/ebajit3/ors_ws/build/ors_robot/meshes/plate.STL -> /home/ebajit3/ors_ws/install/ors_robot/share/ors_robot/meshes
+[0.836s] symbolically linking /home/ebajit3/ors_ws/build/ors_robot/meshes/left_wheel.STL -> /home/ebajit3/ors_ws/install/ors_robot/share/ors_robot/meshes
+[0.836s] symbolically linking /home/ebajit3/ors_ws/build/ors_robot/meshes/M2M2_LIDAR.STL -> /home/ebajit3/ors_ws/install/ors_robot/share/ors_robot/meshes
+[0.837s] symbolically linking /home/ebajit3/ors_ws/build/ors_robot/meshes/right_wheel.STL -> /home/ebajit3/ors_ws/install/ors_robot/share/ors_robot/meshes
+[0.859s] Invoked command in '/home/ebajit3/ors_ws/build/ors_robot' returned '0': PYTHONPATH=/home/ebajit3/ors_ws/build/ors_robot/prefix_override:/usr/lib/python3/dist-packages/colcon_core/task/python/colcon_distutils_commands:/home/ebajit3/ors_ws/install/ors_robot/lib/python3.10/site-packages:${PYTHONPATH} /usr/bin/python3 -W ignore:setup.py install is deprecated setup.py develop --editable --build-directory /home/ebajit3/ors_ws/build/ors_robot/build --no-deps symlink_data
