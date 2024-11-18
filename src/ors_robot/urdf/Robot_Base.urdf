@@ -26,7 +26,7 @@
         rpy="0 0 0" />
       <geometry>
         <mesh
-          filename="package://ors_robot/meshes/base_link.STL" />
+          filename="file://$(find ors_robot)/meshes/base_link.STL" />
       </geometry>
       <material
         name="">
@@ -40,7 +40,7 @@
         rpy="0 0 0" />
       <geometry>
         <mesh
-          filename="package://ors_robot/meshes/base_link.STL" />
+          filename="file://$(find ors_robot)/meshes/base_link.STL" />
       </geometry>
     </collision>
   </link>
@@ -66,7 +66,7 @@
         rpy="0 0 0" />
       <geometry>
         <mesh
-          filename="package://ors_robot/meshes/left_wheel.STL" />
+          filename="file://$(find ors_robot)/meshes/left_wheel.STL" />
       </geometry>
       <material
         name="">
@@ -80,7 +80,7 @@
         rpy="0 0 0" />
       <geometry>
         <mesh
-          filename="package://ors_robot/meshes/left_wheel.STL" />
+          filename="file://$(find ors_robot)/meshes/left_wheel.STL" />
       </geometry>
     </collision>
   </link>
@@ -125,7 +125,7 @@
         rpy="0 0 0" />
       <geometry>
         <mesh
-          filename="package://ors_robot/meshes/right_wheel.STL" />
+          filename="file://$(find ors_robot)/meshes/right_wheel.STL" />
       </geometry>
       <material
         name="">
@@ -139,7 +139,7 @@
         rpy="0 0 0" />
       <geometry>
         <mesh
-          filename="package://ors_robot/meshes/right_wheel.STL" />
+          filename="file://$(find ors_robot)/meshes/right_wheel.STL" />
       </geometry>
     </collision>
   </link>
@@ -184,7 +184,7 @@
         rpy="0 0 0" />
       <geometry>
         <mesh
-          filename="package://ors_robot/meshes/front_wheel.STL" />
+          filename="file://$(find ors_robot)/meshes/front_wheel.STL" />
       </geometry>
       <material
         name="">
@@ -198,7 +198,7 @@
         rpy="0 0 0" />
       <geometry>
         <mesh
-          filename="package://ors_robot/meshes/front_wheel.STL" />
+          filename="file://$(find ors_robot)/meshes/front_wheel.STL" />
       </geometry>
     </collision>
   </link>
@@ -243,7 +243,7 @@
         rpy="0 0 0" />
       <geometry>
         <mesh
-          filename="package://ors_robot/meshes/plate.STL" />
+          filename="file://$(find ors_robot)/meshes/plate.STL" />
       </geometry>
       <material
         name="">
@@ -257,7 +257,7 @@
         rpy="0 0 0" />
       <geometry>
         <mesh
-          filename="package://ors_robot/meshes/plate.STL" />
+          filename="file://$(find ors_robot)/meshes/plate.STL" />
       </geometry>
     </collision>
   </link>
@@ -296,7 +296,7 @@
         rpy="0 0 0" />
       <geometry>
         <mesh
-          filename="package://ors_robot/meshes/M2M2_LIDAR.STL" />
+          filename="file://$(find ors_robot)/meshes/M2M2_LIDAR.STL" />
       </geometry>
       <material
         name="">
@@ -310,7 +310,7 @@
         rpy="0 0 0" />
       <geometry>
         <mesh
-          filename="package://ors_robot/meshes/M2M2_LIDAR.STL" />
+          filename="file://$(find ors_robot)/meshes/M2M2_LIDAR.STL" />
       </geometry>
     </collision>
   </link>
@@ -349,7 +349,7 @@
         rpy="0 0 0" />
       <geometry>
         <mesh
-          filename="package://ors_robot/meshes/depth_cam.STL" />
+          filename="file://$(find ors_robot)/meshes/depth_cam.STL" />
       </geometry>
       <material
         name="">
@@ -363,7 +363,7 @@
         rpy="0 0 0" />
       <geometry>
         <mesh
-          filename="package://ors_robot/meshes/depth_cam.STL" />
+          filename="file://$(find ors_robot)/meshes/depth_cam.STL" />
       </geometry>
     </collision>
   </link>
