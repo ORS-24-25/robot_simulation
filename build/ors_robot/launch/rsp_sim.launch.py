@@ -1,1 +1,0 @@
-/home/ebajit3/ors_ws/src/ors_robot/launch/rsp_sim.launch.py
