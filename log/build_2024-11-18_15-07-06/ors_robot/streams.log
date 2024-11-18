@@ -1,0 +1,18 @@
+[0.994s] Invoking command in '/home/ebajit3/ors_ws/build/ors_robot': PYTHONPATH=/home/ebajit3/ors_ws/build/ors_robot/prefix_override:/usr/lib/python3/dist-packages/colcon_core/task/python/colcon_distutils_commands:/home/ebajit3/ors_ws/install/ors_robot/lib/python3.10/site-packages:${PYTHONPATH} /usr/bin/python3 -W ignore:setup.py install is deprecated setup.py develop --editable --build-directory /home/ebajit3/ors_ws/build/ors_robot/build --no-deps symlink_data
+[1.404s] running develop
+[1.636s] running egg_info
+[1.637s] writing ors_robot.egg-info/PKG-INFO
+[1.637s] writing dependency_links to ors_robot.egg-info/dependency_links.txt
+[1.638s] writing entry points to ors_robot.egg-info/entry_points.txt
+[1.638s] writing requirements to ors_robot.egg-info/requires.txt
+[1.638s] writing top-level names to ors_robot.egg-info/top_level.txt
+[1.639s] reading manifest file 'ors_robot.egg-info/SOURCES.txt'
+[1.643s] writing manifest file 'ors_robot.egg-info/SOURCES.txt'
+[1.645s] running build_ext
+[1.647s] Creating /home/ebajit3/ors_ws/install/ors_robot/lib/python3.10/site-packages/ors-robot.egg-link (link to .)
+[1.648s] 
+[1.648s] Installed /home/ebajit3/ors_ws/build/ors_robot
+[1.649s] running symlink_data
+[1.649s] symbolically linking /home/ebajit3/ors_ws/build/ors_robot/urdf/robot.urdf.xacro -> /home/ebajit3/ors_ws/install/ors_robot/share/ors_robot/urdf
+[1.649s] symbolically linking /home/ebajit3/ors_ws/build/ors_robot/urdf/gazebo_control.xacro -> /home/ebajit3/ors_ws/install/ors_robot/share/ors_robot/urdf
+[1.702s] Invoked command in '/home/ebajit3/ors_ws/build/ors_robot' returned '0': PYTHONPATH=/home/ebajit3/ors_ws/build/ors_robot/prefix_override:/usr/lib/python3/dist-packages/colcon_core/task/python/colcon_distutils_commands:/home/ebajit3/ors_ws/install/ors_robot/lib/python3.10/site-packages:${PYTHONPATH} /usr/bin/python3 -W ignore:setup.py install is deprecated setup.py develop --editable --build-directory /home/ebajit3/ors_ws/build/ors_robot/build --no-deps symlink_data
