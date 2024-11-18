@@ -16,6 +16,7 @@ setup(
         (os.path.join('share', package_name, 'urdf'), glob('urdf/Robot_Base.urdf')),
         (os.path.join('share', package_name, 'urdf'), glob('urdf/robot_base.xacro')),
         (os.path.join('share', package_name, 'meshes'), glob('meshes/*.STL')),
+        (os.path.join('share', package_name, 'slamtec_publisher'), glob('../slamtec_publisher/*.py')),
     ],
     install_requires=['setuptools'],
     zip_safe=True,
