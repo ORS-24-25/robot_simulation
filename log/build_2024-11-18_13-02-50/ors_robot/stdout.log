@@ -1,0 +1,34 @@
+running develop
+running egg_info
+creating ors_robot.egg-info
+writing ors_robot.egg-info/PKG-INFO
+writing dependency_links to ors_robot.egg-info/dependency_links.txt
+writing entry points to ors_robot.egg-info/entry_points.txt
+writing requirements to ors_robot.egg-info/requires.txt
+writing top-level names to ors_robot.egg-info/top_level.txt
+writing manifest file 'ors_robot.egg-info/SOURCES.txt'
+reading manifest file 'ors_robot.egg-info/SOURCES.txt'
+writing manifest file 'ors_robot.egg-info/SOURCES.txt'
+running build_ext
+Creating /home/ebajit3/ors_ws/install/ors_robot/lib/python3.10/site-packages/ors-robot.egg-link (link to .)
+
+Installed /home/ebajit3/ors_ws/build/ors_robot
+running symlink_data
+creating /home/ebajit3/ors_ws/install/ors_robot/share/ament_index
+creating /home/ebajit3/ors_ws/install/ors_robot/share/ament_index/resource_index
+creating /home/ebajit3/ors_ws/install/ors_robot/share/ament_index/resource_index/packages
+symbolically linking /home/ebajit3/ors_ws/build/ors_robot/resource/ors_robot -> /home/ebajit3/ors_ws/install/ors_robot/share/ament_index/resource_index/packages
+symbolically linking /home/ebajit3/ors_ws/build/ors_robot/package.xml -> /home/ebajit3/ors_ws/install/ors_robot/share/ors_robot
+creating /home/ebajit3/ors_ws/install/ors_robot/share/ors_robot/launch
+symbolically linking /home/ebajit3/ors_ws/build/ors_robot/launch/rsp_sim.launch.py -> /home/ebajit3/ors_ws/install/ors_robot/share/ors_robot/launch
+creating /home/ebajit3/ors_ws/install/ors_robot/share/ors_robot/urdf
+symbolically linking /home/ebajit3/ors_ws/build/ors_robot/urdf/Robot_Base.urdf -> /home/ebajit3/ors_ws/install/ors_robot/share/ors_robot/urdf
+symbolically linking /home/ebajit3/ors_ws/build/ors_robot/urdf/robot_base.xacro -> /home/ebajit3/ors_ws/install/ors_robot/share/ors_robot/urdf
+creating /home/ebajit3/ors_ws/install/ors_robot/share/ors_robot/meshes
+symbolically linking /home/ebajit3/ors_ws/build/ors_robot/meshes/depth_cam.STL -> /home/ebajit3/ors_ws/install/ors_robot/share/ors_robot/meshes
+symbolically linking /home/ebajit3/ors_ws/build/ors_robot/meshes/base_link.STL -> /home/ebajit3/ors_ws/install/ors_robot/share/ors_robot/meshes
+symbolically linking /home/ebajit3/ors_ws/build/ors_robot/meshes/front_wheel.STL -> /home/ebajit3/ors_ws/install/ors_robot/share/ors_robot/meshes
+symbolically linking /home/ebajit3/ors_ws/build/ors_robot/meshes/plate.STL -> /home/ebajit3/ors_ws/install/ors_robot/share/ors_robot/meshes
+symbolically linking /home/ebajit3/ors_ws/build/ors_robot/meshes/left_wheel.STL -> /home/ebajit3/ors_ws/install/ors_robot/share/ors_robot/meshes
+symbolically linking /home/ebajit3/ors_ws/build/ors_robot/meshes/M2M2_LIDAR.STL -> /home/ebajit3/ors_ws/install/ors_robot/share/ors_robot/meshes
+symbolically linking /home/ebajit3/ors_ws/build/ors_robot/meshes/right_wheel.STL -> /home/ebajit3/ors_ws/install/ors_robot/share/ors_robot/meshes

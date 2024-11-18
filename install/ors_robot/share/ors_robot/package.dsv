@@ -1,0 +1,9 @@
+source;share/ors_robot/hook/pythonpath.ps1
+source;share/ors_robot/hook/pythonpath.dsv
+source;share/ors_robot/hook/pythonpath.sh
+source;share/ors_robot/hook/ament_prefix_path.ps1
+source;share/ors_robot/hook/ament_prefix_path.dsv
+source;share/ors_robot/hook/ament_prefix_path.sh
+source;../../build/ors_robot/share/ors_robot/hook/pythonpath_develop.ps1
+source;../../build/ors_robot/share/ors_robot/hook/pythonpath_develop.dsv
+source;../../build/ors_robot/share/ors_robot/hook/pythonpath_develop.sh
