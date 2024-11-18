@@ -15,7 +15,7 @@ setup(
     zip_safe=True,
     maintainer='sstevenson',
     maintainer_email='samirdstevenson@gmail.com',
-    description='TODO: Package description',
+    description='Package that deals with all interactions with SLAMTEC M2M2 Mapper',
     license='Apache-2.0',
     tests_require=['pytest'],
     entry_points={
