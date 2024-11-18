@@ -8,7 +8,7 @@ from nav_msgs.msg import OccupancyGrid, Odometry
 from geometry_msgs.msg import PoseStamped, TransformStamped
 from tf2_ros import TransformBroadcaster
 import math
-from slamtec import SlamtecMapper
+from .slamtec import SlamtecMapper
 import time
 import numpy as np
 import argparse
