@@ -85,17 +85,17 @@
     </collision>
   </link>
   <joint
-    name="left_wheel"
+    name="left_wheel_joint"
     type="continuous">
     <origin
       xyz="-0.0129112176850158 -0.117664217504032 0.025328779706945"
-      rpy="-1.5707963267949 0 0" />
+      rpy="-1.5707963267949 1.5707963267949 0" />
     <parent
       link="base_link" />
     <child
       link="left_wheel" />
     <axis
-      xyz="0 0 -1" />
+      xyz="0 0 1" />
     <limit
       effort="10"
       velocity="10" />
@@ -144,11 +144,11 @@
     </collision>
   </link>
   <joint
-    name="right_wheel"
+    name="right_wheel_joint"
     type="continuous">
     <origin
       xyz="-0.0129112176873895 0.117549999993357 0.025328779706945"
-      rpy="-1.5707963267949 0 0" />
+      rpy="-1.5707963267949 1.5707963267949 0" />
     <parent
       link="base_link" />
     <child
@@ -203,7 +203,7 @@
     </collision>
   </link>
   <joint
-    name="front_wheel"
+    name="front_wheel_joint"
     type="continuous">
     <origin
       xyz="0.112773589774212 5.4823545785343E-05 0.00132877970694717"
