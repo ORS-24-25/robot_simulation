@@ -85,17 +85,17 @@
     </collision>
   </link>
   <joint
-    name="left_wheel"
+    name="left_wheel_joint"
     type="continuous">
     <origin
       xyz="-0.0129112176850158 -0.117664217504032 0.025328779706945"
-      rpy="-1.5707963267949 0 0" />
+      rpy="-1.5707963267949 1.5707963267949 0" />
     <parent
       link="base_link" />
     <child
       link="left_wheel" />
     <axis
-      xyz="0 0 -1" />
+      xyz="0 0 1" />
     <limit
       effort="10"
       velocity="10" />
@@ -144,11 +144,11 @@
     </collision>
   </link>
   <joint
-    name="right_wheel"
+    name="right_wheel_joint"
     type="continuous">
     <origin
       xyz="-0.0129112176873895 0.117549999993357 0.025328779706945"
-      rpy="-1.5707963267949 0 0" />
+      rpy="-1.5707963267949 1.5707963267949 0" />
     <parent
       link="base_link" />
     <child
@@ -203,7 +203,7 @@
     </collision>
   </link>
   <joint
-    name="front_wheel"
+    name="front_wheel_joint"
     type="continuous">
     <origin
       xyz="0.112773589774212 5.4823545785343E-05 0.00132877970694717"
@@ -271,112 +271,6 @@
       link="base_link" />
     <child
       link="plate" />
-    <axis
-      xyz="0 0 0" />
-  </joint>
-  <link
-    name="M2M2_LIDAR">
-    <inertial>
-      <origin
-        xyz="0.000544180788152326 -0.000121760206787558 -0.0676836000482276"
-        rpy="0 0 0" />
-      <mass
-        value="0.144547687439008" />
-      <inertia
-        ixx="0.000167357888369665"
-        ixy="7.58898386397937E-10"
-        ixz="1.54108302065642E-08"
-        iyy="0.000166948275602806"
-        iyz="4.60881838904236E-08"
-        izz="0.000189951798778922" />
-    </inertial>
-    <visual>
-      <origin
-        xyz="0 0 0"
-        rpy="0 0 0" />
-      <geometry>
-        <mesh
-          filename="file://$(find ors_robot)/meshes/M2M2_LIDAR.STL" />
-      </geometry>
-      <material
-        name="">
-        <color
-          rgba="0.792156862745098 0.819607843137255 0.933333333333333 1" />
-      </material>
-    </visual>
-    <collision>
-      <origin
-        xyz="0 0 0"
-        rpy="0 0 0" />
-      <geometry>
-        <mesh
-          filename="file://$(find ors_robot)/meshes/M2M2_LIDAR.STL" />
-      </geometry>
-    </collision>
-  </link>
-  <joint
-    name="M2M2_LIDAR"
-    type="fixed">
-    <origin
-      xyz="0.011257243470593 -5.35218498943779E-05 0.1054"
-      rpy="0 0 0" />
-    <parent
-      link="plate" />
-    <child
-      link="M2M2_LIDAR" />
-    <axis
-      xyz="0 0 0" />
-  </joint>
-  <link
-    name="depth_cam">
-    <inertial>
-      <origin
-        xyz="-0.0131202485719072 -0.00185694854136453 -0.000475155115603476"
-        rpy="0 0 0" />
-      <mass
-        value="0.118265203799494" />
-      <inertia
-        ixx="7.81722838749596E-05"
-        ixy="7.60380877739042E-07"
-        ixz="-3.98560089919681E-07"
-        iyy="9.42229928199424E-06"
-        iyz="-4.76491397960946E-09"
-        izz="7.76440264747213E-05" />
-    </inertial>
-    <visual>
-      <origin
-        xyz="0 0 0"
-        rpy="0 0 0" />
-      <geometry>
-        <mesh
-          filename="file://$(find ors_robot)/meshes/depth_cam.STL" />
-      </geometry>
-      <material
-        name="">
-        <color
-          rgba="0.898039215686275 0.917647058823529 0.929411764705882 1" />
-      </material>
-    </visual>
-    <collision>
-      <origin
-        xyz="0 0 0"
-        rpy="0 0 0" />
-      <geometry>
-        <mesh
-          filename="file://$(find ors_robot)/meshes/depth_cam.STL" />
-      </geometry>
-    </collision>
-  </link>
-  <joint
-    name="depth_cam"
-    type="fixed">
-    <origin
-      xyz="0.149440914994276 0.00218526482966985 0.0123528880010465"
-      rpy="0 0 0" />
-    <parent
-      link="plate" />
-    <child
-      link="depth_cam" />
     <axis
       xyz="0 0 0" />
   </joint>
