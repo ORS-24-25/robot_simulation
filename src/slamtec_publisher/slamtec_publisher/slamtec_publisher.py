@@ -21,7 +21,7 @@ class SlamtecPublisher(Node):
         self.tf_broadcaster = TransformBroadcaster(self)
 
         # Set transform frame names
-        self.laser_frame = 'laser_frame'
+        self.laser_frame = 'M2M2_LIDAR'
         self.map_frame = 'map'
         self.base_frame = 'base_link'
         self.odom_frame = 'odom'
@@ -29,18 +29,18 @@ class SlamtecPublisher(Node):
         # Create publishers
         if publish_scan:
             print("Publishing only scan data")
-        sensor_qos = QoSProfile(
-            reliability=QoSReliabilityPolicy.BEST_EFFORT,
-            history=QoSHistoryPolicy.KEEP_LAST,
-            depth=10
-        )
-        self.scan_publisher_ = self.create_publisher(msg_type=LaserScan, topic='scan', qos_profile=sensor_qos)
+        # sensor_qos = QoSProfile(
+        #     reliability=QoSReliabilityPolicy.BEST_EFFORT,
+        #     history=QoSHistoryPolicy.KEEP_LAST,
+        #     depth=10
+        # )
+        self.scan_publisher_ = self.create_publisher(LaserScan, 'scan', 10)
         self.create_timer(0.1, self.publish_scan)
 
         if not publish_scan:
             print("Publishing scan, map, and pose data")
-            self.map_publisher_ = self.create_publisher(msg_type=OccupancyGrid, topic='map', qos_profile=sensor_qos)
-            self.pose_publisher_ = self.create_publisher(msg_type=PoseStamped, topic='pose', qos_profile=sensor_qos)
+            self.map_publisher_ = self.create_publisher(OccupancyGrid, 'map', 10)
+            self.pose_publisher_ = self.create_publisher(PoseStamped, 'pose', 10)
             self.create_timer(1.0, self.publish_map)
             self.create_timer(0.1, self.publish_pose)
 

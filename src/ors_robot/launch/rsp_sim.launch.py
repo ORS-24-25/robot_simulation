@@ -50,7 +50,7 @@ def generate_launch_description():
     slamtec_publisher = Node(
         package='slamtec_publisher',
         executable='slamtec_publisher',
-        name='slamtec_publisher_node',
+        # name='slamtec_publisher_node',
         output='screen',
         parameters=['--scan']
     )
