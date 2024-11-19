@@ -47,14 +47,18 @@ def generate_launch_description():
                                 '-entity', 'ors_robot'],
                     output='screen')
 
-
-
-
-
+    slamtec_publisher = Node(
+        package='slamtec_publisher',
+        executable='slamtec_publisher',
+        # name='slamtec_publisher_node',
+        output='screen',
+        parameters=['--scan']
+    )
 
     # Run the node
     return LaunchDescription([
         gazebo,
         node_robot_state_publisher,
-        spawn_entity
+        spawn_entity,
+        slamtec_publisher,
     ])
