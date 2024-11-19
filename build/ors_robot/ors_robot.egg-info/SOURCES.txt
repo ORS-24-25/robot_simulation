@@ -18,5 +18,8 @@ ors_robot.egg-info/top_level.txt
 ors_robot.egg-info/zip-safe
 resource/ors_robot
 urdf/Robot_Base.urdf
+urdf/depth_camera.xacro
 urdf/gazebo_control.xacro
+urdf/lidar.xacro
 urdf/robot.urdf.xacro
+worlds/test.world
