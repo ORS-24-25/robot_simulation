@@ -14,8 +14,18 @@ import numpy as np
 import argparse
 
 class SlamtecPublisher(Node):
-    def __init__(self, host='192.168.11.1', port=1445, debug=False, publish_scan=False):
+    def __init__(self):
         super().__init__('slamtec_publisher')
+
+        # Declare parameters
+        self.declare_parameter('host', '192.168.11.1')
+        self.declare_parameter('port', 1445)
+        self.declare_parameter('publish_scan', True)
+
+        # Get parameters
+        host = self.get_parameter('host').value
+        port = self.get_parameter('port').value
+        publish_scan = self.get_parameter('publish_scan').value
 
         # Initialize TF Broadcaster
         self.tf_broadcaster = TransformBroadcaster(self)
@@ -138,23 +148,15 @@ class SlamtecPublisher(Node):
         self.tf_broadcaster.sendTransform(t)
 
 def main(args=None):
-    # Start parsing command line arguments
-    parser = argparse.ArgumentParser(description='Slamtec Mapper Publisher')
-    parser.add_argument('--host', type=str, default='192.168.11.1', help='Slamtec Mapper IP address')
-    parser.add_argument('--port', type=int, default=1445, help='Slamtec Mapper port number')
-    parser.add_argument('--scan', action='store_true', help='Publish scan data')
-
-    parsed_args = parser.parse_args()
-
     rclpy.init(args=args)
-    publisher = SlamtecPublisher(
-        host=parsed_args.host, 
-        port=parsed_args.port,
-        publish_scan=(True if parsed_args.scan else False),
-    )
-    rclpy.spin(publisher)
-    publisher.destroy_node()
-    rclpy.shutdown()
+    node = SlamtecPublisher()
+    try:
+        rclpy.spin(node)
+    except KeyboardInterrupt:
+        pass
+    finally:
+        node.destroy_node()
+        rclpy.shutdown()
 
 if __name__ == '__main__':
     main()

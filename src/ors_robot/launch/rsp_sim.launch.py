@@ -43,16 +43,15 @@ def generate_launch_description():
 
 
     spawn_entity = Node(package='gazebo_ros', executable='spawn_entity.py',
-                    arguments=['-topic', 'robot_description',
-                                '-entity', 'ors_robot'],
-                    output='screen')
+        arguments=['-topic', 'robot_description',
+                    '-entity', 'ors_robot'],
+        output='screen')
 
     slamtec_publisher = Node(
         package='slamtec_publisher',
         executable='slamtec_publisher',
         # name='slamtec_publisher_node',
         output='screen',
-        parameters=['--scan']
     )
 
     # Run the node
