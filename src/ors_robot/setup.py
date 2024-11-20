@@ -12,12 +12,16 @@ setup(
         ('share/ament_index/resource_index/packages',
             ['resource/' + package_name]),
         ('share/' + package_name, ['package.xml']),
+        # Include launch files
         (os.path.join('share', package_name, 'launch'), glob('launch/*.launch.py')),
+        # Include URDF and Xacro files
         (os.path.join('share', package_name, 'urdf'), glob('urdf/*.xacro')),
         (os.path.join('share', package_name, 'urdf'), glob('urdf/*.urdf')),
+        # Include mesh files
         (os.path.join('share', package_name, 'meshes'), glob('meshes/*.STL')),
-        (os.path.join('share', package_name, 'slamtec_publisher'), glob('../slamtec_publisher/*.py')),
-        (os.path.join('share', package_name, 'meshes'), glob('worlds/*.world')),
+        # (os.path.join('share', package_name, 'slamtec_publisher'), glob('../slamtec_publisher/*.py')),
+        # Include world files
+        (os.path.join('share', package_name, 'worlds'), glob('worlds/*.world')),
     ],
     install_requires=['setuptools'],
     zip_safe=True,

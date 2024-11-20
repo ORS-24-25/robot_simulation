@@ -22,9 +22,8 @@ class SlamtecPublisher(Node):
 
         # Set transform frame names
         self.laser_frame = 'M2M2_LIDAR'
-        self.map_frame = 'map'
-        self.base_frame = 'base_link'
-        self.odom_frame = 'odom'
+        self.base_frame = 'M2M2_LIDAR'
+        self.odom_frame = 'M2M2_LIDAR'
 
         # Create publishers
         if publish_scan:
