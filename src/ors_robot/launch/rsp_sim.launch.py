@@ -1,10 +1,10 @@
 import os
 from ament_index_python.packages import get_package_share_directory
 from launch import LaunchDescription
-from launch.actions import IncludeLaunchDescription
+from launch.actions import IncludeLaunchDescription, DeclareLaunchArgument
+from launch.substitutions import LaunchConfiguration
+from launch.conditions import IfCondition, UnlessCondition
 from launch.launch_description_sources import PythonLaunchDescriptionSource
-
-
 from launch_ros.actions import Node
 import xacro
 
@@ -15,6 +15,14 @@ def generate_launch_description():
     pkg_name = 'ors_robot'
     # file_subpath = 'urdf/robot.urdf.xacro'
     file_subpath = 'urdf/robot.urdf.xacro'
+
+
+    # Add launch argument
+    sim_arg = DeclareLaunchArgument(
+        'sim', 
+        default_value='false',
+        description='Use simulated config (not using M2M2)',
+    )
 
 
     # Use xacro to process the file
@@ -35,7 +43,6 @@ def generate_launch_description():
     )
 
 
-
     gazebo = IncludeLaunchDescription(
         PythonLaunchDescriptionSource([os.path.join(
             get_package_share_directory('gazebo_ros'), 'launch'), '/gazebo.launch.py']),
@@ -47,17 +54,21 @@ def generate_launch_description():
                     '-entity', 'ors_robot'],
         output='screen')
 
+
     slamtec_publisher = Node(
         package='slamtec_publisher',
         executable='slamtec_publisher',
         # name='slamtec_publisher_node',
         output='screen',
+        condition=UnlessCondition(LaunchConfiguration('sim')),
     )
+
 
     # Run the node
     return LaunchDescription([
         gazebo,
         node_robot_state_publisher,
         spawn_entity,
+        sim_arg,
         slamtec_publisher,
     ])
