@@ -43,7 +43,6 @@ def generate_launch_description():
     )
 
 
-
     gazebo = IncludeLaunchDescription(
         PythonLaunchDescriptionSource([os.path.join(
             get_package_share_directory('gazebo_ros'), 'launch'), '/gazebo.launch.py']),
@@ -55,6 +54,7 @@ def generate_launch_description():
                     '-entity', 'ors_robot'],
         output='screen')
 
+
     slamtec_publisher = Node(
         package='slamtec_publisher',
         executable='slamtec_publisher',
@@ -62,6 +62,7 @@ def generate_launch_description():
         output='screen',
         condition=UnlessCondition(LaunchConfiguration('sim')),
     )
+
 
     # Run the node
     return LaunchDescription([
