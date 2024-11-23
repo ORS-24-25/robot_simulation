@@ -31,27 +31,30 @@ class SlamtecPublisher(Node):
         self.tf_broadcaster = TransformBroadcaster(self)
 
         # Set transform frame names
-        self.laser_frame = 'M2M2_LIDAR'
         self.base_frame = 'M2M2_LIDAR'
-        self.odom_frame = 'M2M2_LIDAR'
 
         # Create publishers
         if publish_scan:
             print("Publishing only scan data")
+        # Should probably implement this soon (QoS)
         # sensor_qos = QoSProfile(
         #     reliability=QoSReliabilityPolicy.BEST_EFFORT,
         #     history=QoSHistoryPolicy.KEEP_LAST,
         #     depth=10
         # )
+
         self.scan_publisher_ = self.create_publisher(LaserScan, 'scan', 10)
         self.create_timer(0.1, self.publish_scan)
 
-        if not publish_scan:
-            print("Publishing scan, map, and pose data")
-            self.map_publisher_ = self.create_publisher(OccupancyGrid, 'map', 10)
-            self.pose_publisher_ = self.create_publisher(PoseStamped, 'pose', 10)
-            self.create_timer(1.0, self.publish_map)
-            self.create_timer(0.1, self.publish_pose)
+        self.map_publisher_ = self.create_publisher(OccupancyGrid, 'map', 10)
+        self.create_timer(0.1, self.publish_map)
+
+        # if not publish_scan:
+        #     print("Publishing scan, map, and pose data")
+        #     self.map_publisher_ = self.create_publisher(OccupancyGrid, 'map', 10)
+        #     self.pose_publisher_ = self.create_publisher(PoseStamped, 'pose', 10)
+        #     self.create_timer(1.0, self.publish_map)
+        #     self.create_timer(0.1, self.publish_pose)
 
         # Initialize Slamtec Mapper
         self.slamtec = SlamtecMapper(host=host, port=port)
@@ -63,7 +66,7 @@ class SlamtecPublisher(Node):
         # Create LaserScan message
         msg = LaserScan()
         msg.header.stamp = self.get_clock().now().to_msg()
-        msg.header.frame_id = self.laser_frame
+        msg.header.frame_id = self.base_frame
 
         # print(scan_data)
 
@@ -91,35 +94,37 @@ class SlamtecPublisher(Node):
         self.scan_publisher_.publish(msg)
 
     def publish_map(self):
+        # Get map data from M2M2
         map_data = self.slamtec.get_map_data()
-        known_data = self.slamtec.get_known_area()
+        
+        # Create OccupancyGrid message
         msg = OccupancyGrid()
         msg.header.stamp = self.get_clock().now().to_msg()
-        msg.header.frame_id = self.map_frame
+        msg.header.frame_id = self.base_frame
         
-        # Convert map data to occupancy grid
-        msg.info.resolution = 0.05  # 5cm per pixel
-        msg.info.width = known_data['max_x'] - known_data['min_x']
-        msg.info.height = known_data['max_y'] - known_data['min_y']
-        msg.info.origin.position.x = map_data.get('min_x', 0.0)
-        msg.info.origin.position.y = map_data.get('min_y', 0.0)
+        # Set map metadata
+        msg.info.resolution = 0.05  # Adjust according to your map's resolution
+        msg.info.width = map_data['dimension_x']
+        msg.info.height = map_data['dimension_y']
+        msg.info.origin.position.x = 0.0
+        msg.info.origin.position.y = 0.0
+        msg.info.origin.orientation.w = 1.0
         
-        # Convert 2D map data to 1D array
+        # Convert map data to 1D grid
         grid_data = []
-        for y in range(msg.info.height):
-            # Convert y index from 0-based to 1-based for map data access
-            row = map_data['map_data'].get(y+1, [])  # Use get() with default empty list
-            if not row:
-                self.get_logger().warn(f"Missing map data for row {y+1}")
-                grid_data.extend([-1] * msg.info.width)  # Fill row with unknown
-                continue
-            for x in range(msg.info.width):
-                if x >= len(row):
-                    grid_data.append(-1)  # Unknown space
-                    continue
-                # Clamp values between 0-100
-                value = max(0, min(100, int(row[x] * 100)))
-                grid_data.append(value)
+        for x in range(msg.info.height):
+            # row_key = str(y)
+            # row = map_data["map_data"][row_key]
+            for y in range(msg.info.width):
+                # Adjust indices to match the coordinate system
+                # value = row[x]
+                value = map_data["map_data"][map_data['dimension_y'] - x][y]
+                if value < 0:
+                    grid_data.append(-1)  # Unknown
+                else:
+                    # Convert to occupancy value between 0 and 100
+                    occupancy_value = max(0, min(100, int(value)))
+                    grid_data.append(occupancy_value)
         
         msg.data = grid_data
         self.map_publisher_.publish(msg)
@@ -130,7 +135,7 @@ class SlamtecPublisher(Node):
         # Publish PoseStamped
         pose_msg = PoseStamped()
         pose_msg.header.stamp = self.get_clock().now().to_msg()
-        pose_msg.header.frame_id = self.map_frame
+        pose_msg.header.frame_id = self.base_frame
         pose_msg.pose.position.x = pose_data['x']
         pose_msg.pose.position.y = pose_data['y']
         pose_msg.pose.orientation.z = math.sin(pose_data['yaw'] / 2.0)
@@ -140,7 +145,7 @@ class SlamtecPublisher(Node):
         # Publish transform
         t = TransformStamped()
         t.header.stamp = self.get_clock().now().to_msg()
-        t.header.frame_id = self.map_frame
+        t.header.frame_id = self.base_frame
         t.child_frame_id = self.base_frame
         t.transform.translation.x = pose_data['x']
         t.transform.translation.y = pose_data['y']

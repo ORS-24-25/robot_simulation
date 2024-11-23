@@ -272,6 +272,8 @@ if __name__ == '__main__':
     # """
     # st.get_all()
     map_data = st.get_map_data()
+    # p = Path("./map_data.txt")
+    # p.write_text(map_data)
     show_map(map_data)
 
     # laser_data = st.get_laser_scan()
