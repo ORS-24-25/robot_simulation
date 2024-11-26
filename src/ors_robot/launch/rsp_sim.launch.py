@@ -10,10 +10,8 @@ import xacro
 
 
 def generate_launch_description():
-
     # Specify the name of the package and path to xacro file within the package
     pkg_name = 'ors_robot'
-    # file_subpath = 'urdf/robot.urdf.xacro'
     file_subpath = 'urdf/robot.urdf.xacro'
 
 
@@ -28,9 +26,6 @@ def generate_launch_description():
     # Use xacro to process the file
     xacro_file = os.path.join(get_package_share_directory(pkg_name),file_subpath)
     robot_description_raw = xacro.process_file(xacro_file).toxml()
-    # urdf_file_path = os.path.join(get_package_share_directory(pkg_name), file_subpath)
-    # with open(urdf_file_path, 'r') as urdf_file:
-    #     robot_description_raw = urdf_file.read()
 
 
     # Configure the robot state publisher node
