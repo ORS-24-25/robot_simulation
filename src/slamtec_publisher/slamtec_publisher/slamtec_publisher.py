@@ -59,8 +59,8 @@ class SlamtecPublisher(Node):
         self.map_publisher_ = self.create_publisher(OccupancyGrid, 'map', map_qos)
         self.create_timer(0.5, self.publish_map)
 
-        # self.pose_publisher_ = self.create_publisher(PoseStamped, 'pose', 10)
-        # self.create_timer(0.1, self.publish_pose)
+        self.pose_publisher_ = self.create_publisher(PoseStamped, 'pose', 10)
+        self.create_timer(0.1, self.publish_pose)
 
         # Initialize Slamtec Mapper
         self.slamtec = SlamtecMapper(host=host, port=port)
@@ -69,21 +69,7 @@ class SlamtecPublisher(Node):
         self.publish_static_transforms()
 
 
-    # Publish all static transforms needed (odom and map)
     def publish_static_transforms(self):
-        # Static transform: map -> odom
-        static_transform_map_to_odom = TransformStamped()
-        static_transform_map_to_odom.header.stamp = self.get_clock().now().to_msg()
-        static_transform_map_to_odom.header.frame_id = self.map_frame
-        static_transform_map_to_odom.child_frame_id = self.odom_frame
-        static_transform_map_to_odom.transform.translation.x = 0.0
-        static_transform_map_to_odom.transform.translation.y = 0.0
-        static_transform_map_to_odom.transform.translation.z = 0.0
-        static_transform_map_to_odom.transform.rotation.x = 0.0
-        static_transform_map_to_odom.transform.rotation.y = 0.0
-        static_transform_map_to_odom.transform.rotation.z = 0.0
-        static_transform_map_to_odom.transform.rotation.w = 1.0
-
         # Static transform: base_link -> plate
         static_transform_base_link_to_plate = TransformStamped()
         static_transform_base_link_to_plate.header.stamp = self.get_clock().now().to_msg()
@@ -97,13 +83,13 @@ class SlamtecPublisher(Node):
         static_transform_base_link_to_plate.transform.rotation.z = 0.0
         static_transform_base_link_to_plate.transform.rotation.w = 1.0
 
-        # Publish both static transforms
+        # Publish static transforms
         self.static_tf_broadcaster.sendTransform([
-            static_transform_map_to_odom,
+            # static_transform_odom_to_base_link,
             static_transform_base_link_to_plate
         ])
 
-        self.get_logger().info('Published static transforms: map -> odom and base_link -> plate')
+        self.get_logger().info('Published static transforms: odom -> base_link and base_link -> plate')
 
 
     def publish_scan(self):
@@ -174,22 +160,36 @@ class SlamtecPublisher(Node):
                     grid_data.append(occupancy_value)
         
         msg.data = grid_data
-        self.get_logger().info(f'Publishing map with {len(grid_data)} cells')
+        # self.get_logger().info(f'Publishing map with {len(grid_data)} cells')
         self.map_publisher_.publish(msg)
 
 
     def publish_pose(self):
         pose_data = self.slamtec.get_pose()
         
-        # Transform: odom -> base_link (dynamic)
+        # Extract pose data
+        x = float(pose_data['x'])
+        y = float(pose_data['y'])
+        yaw = float(pose_data['yaw'])
+        
+        # Transform: map -> odom (dynamic)
         t = TransformStamped()
         t.header.stamp = self.get_clock().now().to_msg()
-        t.header.frame_id = self.odom_frame
-        t.child_frame_id = self.base_frame
-        t.transform.translation.x = pose_data['x']
-        t.transform.translation.y = pose_data['y']
-        t.transform.rotation.z = math.sin(pose_data['yaw'] / 2.0)
-        t.transform.rotation.w = math.cos(pose_data['yaw'] / 2.0)
+        t.header.frame_id = self.map_frame
+        t.child_frame_id = self.odom_frame
+        t.transform.translation.x = x
+        t.transform.translation.y = y
+        t.transform.translation.z = 0.0
+
+        # Calculate the rotation quaternion from yaw
+        siny_cosp = math.sin(yaw / 2.0)
+        cosy_cosp = math.cos(yaw / 2.0)
+        t.transform.rotation.x = 0.0
+        t.transform.rotation.y = 0.0
+        t.transform.rotation.z = siny_cosp
+        t.transform.rotation.w = cosy_cosp
+
+        # Publish the transform
         self.tf_broadcaster.sendTransform(t)
 
 
