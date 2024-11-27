@@ -70,27 +70,27 @@ class SlamtecPublisher(Node):
 
 
     def publish_static_transforms(self):
+        now = self.get_clock().now().to_msg()
+
         # Static transform: base_link -> plate
-        static_transform_base_link_to_plate = TransformStamped()
-        static_transform_base_link_to_plate.header.stamp = self.get_clock().now().to_msg()
-        static_transform_base_link_to_plate.header.frame_id = self.base_frame
-        static_transform_base_link_to_plate.child_frame_id = self.plate_frame
-        static_transform_base_link_to_plate.transform.translation.x = 0.0
-        static_transform_base_link_to_plate.transform.translation.y = 0.0
-        static_transform_base_link_to_plate.transform.translation.z = 0.0
-        static_transform_base_link_to_plate.transform.rotation.x = 0.0
-        static_transform_base_link_to_plate.transform.rotation.y = 0.0
-        static_transform_base_link_to_plate.transform.rotation.z = 0.0
-        static_transform_base_link_to_plate.transform.rotation.w = 1.0
+        t1 = TransformStamped()
+        t1.header.stamp = now
+        t1.header.frame_id = self.base_frame
+        t1.child_frame_id = self.plate_frame
+        t1.transform.translation.x = 0.0
+        t1.transform.translation.y = 0.0
+        t1.transform.translation.z = 0.0
+        t1.transform.rotation.x = 0.0
+        t1.transform.rotation.y = 0.0
+        t1.transform.rotation.z = 0.0
+        t1.transform.rotation.w = 1.0
 
         # Publish static transforms
-        self.static_tf_broadcaster.sendTransform([
-            # static_transform_odom_to_base_link,
-            static_transform_base_link_to_plate
-        ])
+        self.static_tf_broadcaster.sendTransform(
+            [t1]
+        )
 
-        self.get_logger().info('Published static transforms: odom -> base_link and base_link -> plate')
-
+        self.get_logger().info('Published static transforms: base_link -> plate and odom -> base_link')
 
     def publish_scan(self):
         # Get laser scan data
@@ -142,8 +142,9 @@ class SlamtecPublisher(Node):
         msg.info.height = map_data['dimension_y']
 
         # Center map on robot's initial position
-        msg.info.origin.position.x = -msg.info.width * msg.info.resolution / 2.0
-        msg.info.origin.position.y = -msg.info.height * msg.info.resolution / 2.0
+        pose = self.slamtec.get_pose()
+        msg.info.origin.position.x = pose['x'] - (msg.info.width * msg.info.resolution / 2.0)
+        msg.info.origin.position.y = pose['y'] - (msg.info.height * msg.info.resolution / 2.0)
         msg.info.origin.orientation.w = 1.0
         
         # Convert map data to 1D grid
