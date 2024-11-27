@@ -1,58 +1,33 @@
 <?xml version="1.0"?>
 <robot xmlns:xacro="http://www.ros.org/wiki/xacro" >
 
-  <link
-    name="M2M2_LIDAR">
+  <link name="M2M2_LIDAR">
     <inertial>
-      <origin
-        xyz="0.000544180788152326 -0.000121760206787558 -0.0676836000482276"
-        rpy="0 0 0" />
-      <mass
-        value="0.144547687439008" />
-      <inertia
-        ixx="0.000167357888369665"
-        ixy="7.58898386397937E-10"
-        ixz="1.54108302065642E-08"
-        iyy="0.000166948275602806"
-        iyz="4.60881838904236E-08"
-        izz="0.000189951798778922" />
+      <origin xyz="0.000544180788152326 -0.000121760206787558 -0.0676836000482276" rpy="0 0 0" />
+      <mass value="0.144547687439008" />
+      <inertia ixx="0.000167357888369665" ixy="7.58898386397937E-10" ixz="1.54108302065642E-08" iyy="0.000166948275602806" iyz="4.60881838904236E-08" izz="0.000189951798778922" />
     </inertial>
     <visual>
-      <origin
-        xyz="0 0 0"
-        rpy="0 0 0" />
+      <origin xyz="0 0 0" rpy="0 0 0" />
       <geometry>
-        <mesh
-          filename="file://$(find ors_robot)/meshes/M2M2_LIDAR.STL" />
+        <mesh filename="file://$(find ors_robot)/meshes/M2M2_LIDAR.STL" />
       </geometry>
-      <material
-        name="">
-        <color
-          rgba="0.792156862745098 0.819607843137255 0.933333333333333 1" />
+      <material name="">
+        <color rgba="0.792156862745098 0.819607843137255 0.933333333333333 1" />
       </material>
     </visual>
     <collision>
-      <origin
-        xyz="0 0 0"
-        rpy="0 0 0" />
+      <origin xyz="0 0 0" rpy="0 0 0" />
       <geometry>
-        <mesh
-          filename="file://$(find ors_robot)/meshes/M2M2_LIDAR.STL" />
+        <mesh filename="file://$(find ors_robot)/meshes/M2M2_LIDAR.STL" />
       </geometry>
     </collision>
   </link>
-  <joint
-    name="M2M2_LIDAR"
-    type="fixed">
-    <origin
-      xyz="0.011257243470593 -5.35218498943779E-05 0.1054"
-      rpy="0 0 0" />
-    <parent
-      link="plate" />
-    <child
-      link="M2M2_LIDAR" />
-    <axis
-      xyz="0 0 0" />
+  <joint name="M2M2_LIDAR" type="fixed">
+    <origin xyz="0.011257243470593 -5.35218498943779E-05 0.1054" rpy="0 0 0" />
+    <parent link="plate" />
+    <child link="M2M2_LIDAR" />
+    <axis xyz="0 0 0" />
   </joint>
 
     <gazebo reference="M2M2_LIDAR">

@@ -1,7 +1,11 @@
 <?xml version="1.0" encoding="utf-8"?>
 <!-- This URDF was automatically created by SolidWorks to URDF Exporter! Originally created by Stephen Brawner (brawner@gmail.com) 
-     Commit Version: 1.6.0-4-g7f85cfe  Build Version: 1.6.7995.38578
-     For more information, please see http://wiki.ros.org/sw_urdf_exporter -->
+    Commit Version: 1.6.0-4-g7f85cfe  Build Version: 1.6.7995.38578
+    For more information, please see http://wiki.ros.org/sw_urdf_exporter -->
+
+<!-- Links: Represents a component -->
+<!-- Joints: Represents links between components -->
+
 <robot name="ors_robot">
 
   <!-- Base Link -->
