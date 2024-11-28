@@ -22,12 +22,10 @@ class SlamtecPublisher(Node):
         # Declare parameters
         self.declare_parameter('host', '192.168.11.1')
         self.declare_parameter('port', 1445)
-        self.declare_parameter('publish_scan', True)
 
         # Get parameters
         host = self.get_parameter('host').value
         port = self.get_parameter('port').value
-        publish_scan = self.get_parameter('publish_scan').value
 
         # Initialize TF Broadcaster
         self.tf_broadcaster = TransformBroadcaster(self)
@@ -41,8 +39,7 @@ class SlamtecPublisher(Node):
         self.lidar_frame = 'M2M2_LIDAR'
 
         # Create publishers
-        # Should probably implement this soon (QoS)
-        # sensor_qos = QoSProfile(
+        # scan_qos = QoSProfile(
         #     reliability=QoSReliabilityPolicy.BEST_EFFORT,
         #     history=QoSHistoryPolicy.KEEP_LAST,
         #     depth=10
@@ -52,6 +49,12 @@ class SlamtecPublisher(Node):
             history=QoSHistoryPolicy.KEEP_LAST,
             depth=10
         )
+        pose_qos = QoSProfile(
+            reliability=QoSReliabilityPolicy.RELIABLE,
+            history=QoSHistoryPolicy.KEEP_LAST,
+            depth=1
+        )
+
 
         self.scan_publisher_ = self.create_publisher(LaserScan, 'scan', 10)
         self.create_timer(0.1, self.publish_scan)
@@ -59,7 +62,7 @@ class SlamtecPublisher(Node):
         self.map_publisher_ = self.create_publisher(OccupancyGrid, 'map', map_qos)
         self.create_timer(0.5, self.publish_map)
 
-        self.pose_publisher_ = self.create_publisher(PoseStamped, 'pose', 10)
+        self.pose_publisher_ = self.create_publisher(PoseStamped, 'pose', pose_qos)
         self.create_timer(0.1, self.publish_pose)
 
         # Initialize Slamtec Mapper
@@ -67,6 +70,11 @@ class SlamtecPublisher(Node):
 
         # Publish static transforms
         self.publish_static_transforms()
+
+        # Check connection. \\ How often to do this?
+        self.create_timer(1, self.slamtec.check_connection)
+
+        self.get_logger().info("Node started succesfully")
 
 
     def publish_static_transforms(self):
@@ -94,7 +102,11 @@ class SlamtecPublisher(Node):
 
     def publish_scan(self):
         # Get laser scan data
-        scan_data = self.slamtec.get_laser_scan(valid_only=True)
+        try:
+            scan_data = self.slamtec.get_laser_scan(valid_only=True)
+        except:
+            self.slamtec.check_connection()
+            return
 
         # Create LaserScan message
         msg = LaserScan()
@@ -129,7 +141,10 @@ class SlamtecPublisher(Node):
 
     def publish_map(self):
         # Get map data from M2M2
-        map_data = self.slamtec.get_map_data()
+        try:
+            map_data = self.slamtec.get_map_data()
+        except:
+            self.slamtec.check_connection()
         
         # Create OccupancyGrid message
         msg = OccupancyGrid()
@@ -166,7 +181,10 @@ class SlamtecPublisher(Node):
 
 
     def publish_pose(self):
-        pose_data = self.slamtec.get_pose()
+        try:
+            pose_data = self.slamtec.get_pose()
+        except:
+            self.slamtec.check_connection()
         
         # Extract pose data
         x = float(pose_data['x'])

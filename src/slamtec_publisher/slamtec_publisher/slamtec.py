@@ -13,8 +13,11 @@ import sys
 class SlamtecMapper:
     def __init__(self, host, port, dump=False, dump_dir="dump"):
         print(f"Connecting to {host}:{port}")
+        self.host = host
+        self.port = port
         self.socket = socket.socket(socket.AF_INET, socket.SOCK_STREAM)
-        self.socket.connect((host, port))
+        self.socket.settimeout(5)
+        self.socket.connect((self.host, self.port))
         self.request_id = 0
         self.dump = dump
         if self.dump:
@@ -26,6 +29,23 @@ class SlamtecMapper:
 
     def disconnect(self):
         self.socket.close()
+
+    def check_connection(self):
+        # print("Checking connection")
+        try:
+            self.socket.settimeout(1)
+            self.get_device_info()
+            # If we cant data, it has disconnected
+        except BlockingIOError:
+            return 0    # socket is open and reading from it would block
+        except:
+            print("Disconnected. Reconnecting...")
+            # If this fails, the exception will propogate and end execution
+            self.socket.connect((self.host, self.port))
+        finally:
+            self.socket.settimeout(5)
+            # Reset timeout
+        return 0
 
     def _send_request(self, command, args=None):
         request = {
