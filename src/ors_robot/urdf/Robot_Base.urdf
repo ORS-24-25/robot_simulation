@@ -11,9 +11,9 @@
   <!-- Base Link -->
   <link name="base_link">
     <inertial>
-      <origin xyz="0.0375410289558811 -0.000428988568958566 0.0421956483515309" rpy="0 0 0" />
-      <mass value="3.75941738254691" />
-      <inertia ixx="0.0302625393343646" ixy="0.000494029605687653" ixz="0.000877895110474979" iyy="0.0183790893714639" iyz="3.90426116410347E-05" izz="0.0454611424589501"/>
+      <origin xyz="0.036054 -0.00042371 0.042377" rpy="0 0 0" />
+      <mass value="3.805" />
+      <inertia ixx="0.030279" ixy="0.00049403" ixz="0.00087797" iyy="0.018392" iyz="3.9043E-05" izz="0.045468"/>
     </inertial>
     <visual>
       <origin
@@ -26,7 +26,7 @@
       <material
         name="">
         <color
-          rgba="0.964705882352941 0.964705882352941 0.952941176470588 1" />
+          rgba="0.96471 0.96471 0.95294 1" />
       </material>
     </visual>
     <collision>
@@ -43,9 +43,9 @@
   <!-- Left Wheel Link -->
   <link name="left_wheel">
     <inertial>
-      <origin xyz="3.51874085424697E-12 1.11144426995224E-12 1.99507077525141E-13" rpy="0 0 0" />
-      <mass value="0.0610725611857856" />
-      <inertia ixx="2.0932620346428E-05" ixy="4.70726299862862E-31" ixz="-2.66341320047295E-16" iyy="2.0932620346428E-05" iyz="-8.67742268246757E-21" izz="3.95750196483891E-05" />
+      <origin xyz="-2.2204E-14 0 1.1102E-16" rpy="0 0 0" />
+      <mass value="0.061073" />
+      <inertia ixx="2.0933E-05" ixy="3.9628E-31" ixz="1.5383E-21" iyy="2.0933E-05" iyz="-5.0431E-22" izz="3.9575E-05" />
     </inertial>
     <visual>
       <origin xyz="0 0 0" rpy="0 0 0" />
@@ -53,7 +53,7 @@
         <mesh filename="file://$(find ors_robot)/meshes/left_wheel.STL" />
       </geometry>
       <material name="">
-        <color rgba="0.792156862745098 0.819607843137255 0.933333333333333 1" />
+        <color rgba="0.79216 0.81961 0.93333 1" />
       </material>
     </visual>
     <collision>
@@ -64,7 +64,7 @@
     </collision>
   </link>
   <joint name="left_wheel_joint" type="continuous">
-    <origin xyz="-0.0129112176850158 -0.117664217504032 0.025328779706945" rpy="-1.5707963267949 1.5707963267949 0" />
+    <origin xyz="-0.012911 0.11755 0.025329" rpy="-1.5707963267949 1.5707963267949 0" />
     <parent link="base_link" />
     <child link="left_wheel" />
     <axis xyz="0 0 1" />
@@ -75,9 +75,9 @@
   <!-- Right Wheel Link -->
   <link name="right_wheel">
     <inertial>
-      <origin xyz="1.58206781009085E-13 1.11127773649855E-12 1.99618099827603E-13" rpy="0 0 0" />
-      <mass value="0.0610725611857856" />
-      <inertia ixx="2.0932620346428E-05" ixy="3.70181437751706E-31" ixz="-2.66341411820888E-16" iyy="2.0932620346428E-05" iyz="-8.74736255787152E-21" izz="3.95750196483891E-05" />
+      <origin xyz="-4.8861E-13 0 -1.1102E-16" rpy="0 0 0" />
+      <mass value="0.061073" />
+      <inertia ixx="2.0933E-05" ixy="3.3592E-31" ixz="1.8419E-21" iyy="2.0933E-05" iyz="-4.3437E-22" izz="3.9575E-05" />
     </inertial>
     <visual>
       <origin xyz="0 0 0" rpy="0 0 0" />
@@ -85,7 +85,7 @@
         <mesh filename="file://$(find ors_robot)/meshes/right_wheel.STL" />
       </geometry>
       <material name="">
-        <color rgba="0.792156862745098 0.819607843137255 0.933333333333333 1" />
+        <color rgba="0.79216 0.81961 0.93333 1" />
       </material>
     </visual>
     <collision>
@@ -99,7 +99,7 @@
     </collision>
   </link>
   <joint name="right_wheel_joint" type="continuous">
-    <origin xyz="-0.0129112176873895 0.117549999993357 0.025328779706945" rpy="-1.5707963267949 1.5707963267949 0" />
+    <origin xyz="-0.012911 -0.11766 0.025329" rpy="-1.5708 0 0" />
     <parent link="base_link" />
     <child link="right_wheel" />
     <axis xyz="0 0 1" />
@@ -110,9 +110,9 @@
   <!-- Front Wheel Link -->
   <link name="front_wheel">
     <inertial>
-      <origin xyz="1.76092473935796E-12 1.50951473543159E-12 1.99518179755387E-12" rpy="0 0 0" />
-      <mass value="0.00785398163397449" />
-      <inertia ixx="6.05411084285534E-07" ixy="4.0573618672563E-33" ixz="3.03941757673171E-18" iyy="6.05411084285534E-07" iyz="-1.54167304373854E-22" izz="3.92699081698725E-07" />
+      <origin xyz="0 1.1102E-16 -2.7756E-17" rpy="0 0 0" />
+      <mass value="0.007854" />
+      <inertia ixx="6.0541E-07" ixy="1.3462E-17" ixz="2.5505E-23" iyy="3.927E-07" iyz="1.3278E-23" izz="6.0541E-07" />
     </inertial>
     <visual>
       <origin xyz="0 0 0" rpy="0 0 0" />
@@ -120,7 +120,7 @@
         <mesh filename="file://$(find ors_robot)/meshes/front_wheel.STL" />
       </geometry>
       <material name="">
-        <color rgba="0.792156862745098 0.819607843137255 0.933333333333333 1" />
+        <color rgba="0.79216 0.81961 0.93333 1" />
       </material>
     </visual>
     <collision>
@@ -131,10 +131,10 @@
     </collision>
   </link>
   <joint name="front_wheel_joint" type="continuous">
-    <origin xyz="0.112773589774212 5.4823545785343E-05 0.00132877970694717" rpy="-1.5707963267949 0 0" />
+    <origin xyz="0.11327 5.4824E-05 0.0013288" rpy="0 0 0" />
     <parent link="base_link" />
     <child link="front_wheel" />
-    <axis xyz="0 0 -1" />
+    <axis xyz="0 1 0" />
     <limit effort="10" velocity="10" />
     <dynamics damping="0" friction="0" />
   </joint>
@@ -152,7 +152,7 @@
         <mesh filename="file://$(find ors_robot)/meshes/plate.STL" />
       </geometry>
       <material name="">
-        <color rgba="0.792156862745098 0.819607843137255 0.933333333333333 1" />
+        <color rgba="1 1 1 1" />
       </material>
     </visual>
     <collision>
@@ -163,9 +163,19 @@
     </collision>
   </link>
   <joint name="plate" type="fixed">
-    <origin xyz="-0.0127165282933757 3.07436914599446E-05 0.239828779706945" rpy="0 0 0" />
+    <origin xyz="-0.012717 3.0744E-05 0.23383" rpy="0 0 0" />
     <parent link="base_link" />
     <child link="plate" />
     <axis xyz="0 0 0" />
   </joint>
+
+  <!-- Base Footprint Link -->
+    <link name="base_footprint">
+    </link>
+    
+    <joint name="base_footprint_joint" type="fixed">
+        <parent link="base_link"/>
+        <child link="base_footprint"/>
+        <origin xyz="0 0 0" rpy="0 0 0"/>
+    </joint>
 </robot>
