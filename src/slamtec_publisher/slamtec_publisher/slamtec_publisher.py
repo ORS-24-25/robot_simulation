@@ -1,4 +1,14 @@
 #!/usr/bin/env python3
+"""slamtec_publisher.py
+This module contains the SlamtecPublisher class, which is a ROS2 node that publishes
+data from a Slamtec M2M2 Mapper.
+
+Classes:
+    SlamtecPublisher: A ROS2 node that publishes data from a Slamtec M2M2 Mapper.
+Functions:
+    main(args=None): Entry point for the SlamtecPublisher node.
+
+"""
 
 import rclpy
 from rclpy.node import Node
@@ -14,9 +24,37 @@ import numpy as np
 import argparse
 
 class SlamtecPublisher(Node):
+    """SlamtecPublisher class for publishing Slamtec Mapper data.
+    This node publishes laser scan data, occupancy grid maps, and the robot's pose.
+    It also handles the broadcasting of static and dynamic transforms.
+    Attributes:
+        tf_broadcaster (TransformBroadcaster): Broadcasts dynamic transforms.
+        static_tf_broadcaster (StaticTransformBroadcaster): Broadcasts static transforms.
+        map_frame (str): Name of the map frame.
+        odom_frame (str): Name of the odom frame.
+        base_frame (str): Name of the base frame.
+        plate_frame (str): Name of the plate frame.
+        lidar_frame (str): Name of the lidar frame.
+        scan_publisher_ (Publisher): Publishes laser scan data.
+        map_publisher_ (Publisher): Publishes occupancy grid maps.
+        pose_publisher_ (Publisher): Publishes the robot's pose.
+        slamtec (SlamtecMapper): Interface to the Slamtec Mapper.
 
+    Methods:
+        __init__(self): Initialize the SlamtecPublisher node.
+        publish_static_transforms(self): Publish static transforms between frames.
+        publish_scan(self): Publish laser scan data to /scan.
+        publish_map(self): Publish occupancy grid map to /map.
+        publish_pose(self): Publish the robot's pose.
+    """
 
     def __init__(self):
+        """
+        Initialize the SlamtecPublisher node.
+
+        This method declares and retrieves parameters, initializes publishers and timers,
+        and sets up the Slamtec Mapper.
+        """
         super().__init__('slamtec_publisher')
 
         # Declare parameters
@@ -78,6 +116,11 @@ class SlamtecPublisher(Node):
 
 
     def publish_static_transforms(self):
+        """
+        Publish static transforms between frames.
+
+        This method publishes the static transform between the base_link and plate frames.
+        """
         now = self.get_clock().now().to_msg()
 
         # Static transform: base_link -> plate
@@ -101,6 +144,12 @@ class SlamtecPublisher(Node):
         self.get_logger().info('Published static transforms: base_link -> plate and odom -> base_link')
 
     def publish_scan(self):
+        """
+        Publish laser scan data to /scan.
+
+        This method retrieves laser scan data from the Slamtec Mapper and publishes it
+        as a LaserScan message.
+        """
         # Get laser scan data
         try:
             scan_data = self.slamtec.get_laser_scan(valid_only=True)
@@ -140,6 +189,12 @@ class SlamtecPublisher(Node):
 
 
     def publish_map(self):
+        """
+        Publish occupancy grid map to /map.
+
+        This method retrieves map data from the Slamtec Mapper and publishes it
+        as an OccupancyGrid message.
+        """
         # Get map data from M2M2
         try:
             map_data = self.slamtec.get_map_data()
@@ -181,6 +236,13 @@ class SlamtecPublisher(Node):
 
 
     def publish_pose(self):
+        """
+        Publish the robot's pose.
+
+        This method retrieves the robot's pose from the Slamtec Mapper and publishes it
+        as a PoseStamped message. It also broadcasts the dynamic transform between
+        the map and odom frames.
+        """
         try:
             pose_data = self.slamtec.get_pose()
         except:
@@ -213,6 +275,11 @@ class SlamtecPublisher(Node):
 
 
 def main(args=None):
+    """
+    Entry point for the SlamtecPublisher node.
+
+    This function initializes the ROS2 node and starts spinning.
+    """
     rclpy.init(args=args)
     node = SlamtecPublisher()
     try:
