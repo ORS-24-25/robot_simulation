@@ -55,3 +55,6 @@ CATKIN_IGNORE
 
 # slamtec publisher
 /src/slamtec_publisher/slamtec_publisher/dump
+
+# frames
+/frames_*
