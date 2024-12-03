@@ -10,8 +10,39 @@ from launch.launch_description_sources import PythonLaunchDescriptionSource
 from launch_ros.actions import Node
 import xacro
 
+"""
+Launch file for robot simulation.
 
-def generate_launch_description():
+This launch file sets up the robot simulation environment, including the robot state publisher,
+Gazebo simulation, SLAM toolbox, and Slamtec publisher.
+
+Functions:
+    generate_launch_description(): Generates the launch description for the robot simulation.
+
+Launch Arguments:
+    sim (bool): Use simulated config (default: false). Select with sim:=<bool>.
+    world (str): Path to the Gazebo world file (default: src/ors_robot/worlds/test.world).
+    slam_params_file (str): Path to the ROS2 parameters file for the SLAM Toolbox (default: src/ors_robot/config/mapper_params_online_async.yaml).
+
+Nodes:
+    robot_state_publisher: Publishes the robot state to the /robot_description topic.
+    gazebo: Launches the Gazebo simulation environment.
+    spawn_entity: Spawns the robot entity in the Gazebo simulation.
+    slam_toolbox: Launches the SLAM toolbox for mapping and localization.
+    slamtec_publisher: Publishes data from the Slamtec sensor (only if sim is false).
+"""
+def generate_launch_description() -> LaunchDescription:
+    """
+    Generate the launch description for the ORS robot simulation.
+    This function sets up the launch configuration for the ORS robot simulation,
+    including the robot state publisher, Gazebo simulation, SLAM toolbox, and
+    Slamtec publisher. It declares necessary launch arguments and includes
+    relevant nodes and launch files.
+    Returns:
+        LaunchDescription: The launch description containing all the nodes and
+        configurations for the simulation.
+    """
+
     # Specify the name of the package and path to xacro file within the package
     pkg_name = 'ors_robot'
     file_subpath = 'urdf/robot.urdf.xacro'
