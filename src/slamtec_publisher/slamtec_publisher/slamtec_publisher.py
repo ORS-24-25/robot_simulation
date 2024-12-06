@@ -19,9 +19,6 @@ from geometry_msgs.msg import PoseStamped, TransformStamped
 from tf2_ros import TransformBroadcaster, StaticTransformBroadcaster
 import math
 from .slamtec import SlamtecMapper
-import time
-import numpy as np
-import argparse
 
 class SlamtecPublisher(Node):
     """SlamtecPublisher class for publishing Slamtec Mapper data.
@@ -141,7 +138,7 @@ class SlamtecPublisher(Node):
             [t1]
         )
 
-        self.get_logger().info('Published static transforms: base_link -> plate and odom -> base_link')
+        # self.get_logger().info('Published static transforms: base_link -> plate and odom -> base_link')
 
     def publish_scan(self):
         """
@@ -213,6 +210,7 @@ class SlamtecPublisher(Node):
 
         # Center map on robot's initial position
         pose = self.slamtec.get_pose()
+        # Transform from odom to map
         msg.info.origin.position.x = pose['x'] - (msg.info.width * msg.info.resolution / 2.0)
         msg.info.origin.position.y = pose['y'] - (msg.info.height * msg.info.resolution / 2.0)
         msg.info.origin.orientation.w = 1.0
