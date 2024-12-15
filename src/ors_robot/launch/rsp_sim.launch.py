@@ -120,7 +120,11 @@ def generate_launch_description() -> LaunchDescription:
         condition=UnlessCondition(LaunchConfiguration('sim')),
     )
 
-    # TODO: Add depth cam realsense node with launch condition
+    d435i_launch = IncludeLaunchDescription(
+        PythonLaunchDescriptionSource([os.path.join(
+            get_package_share_directory('d435i'), 'launch'), '/d435i.launch.py']),
+        condition=UnlessCondition(LaunchConfiguration('sim'))
+    )
 
     # Run the node
     return LaunchDescription([
@@ -130,6 +134,7 @@ def generate_launch_description() -> LaunchDescription:
         spawn_entity,
         sim_arg,
         slamtec_publisher,
+        d435i_launch,
         slam_params_file,
         slam_toolbox,
         # RegisterEventHandler(
