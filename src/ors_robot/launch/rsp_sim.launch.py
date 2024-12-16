@@ -55,6 +55,13 @@ def generate_launch_description() -> LaunchDescription:
         description='Use simulated config (not using M2M2)',
     )
 
+    # Add slam launch argument
+    slam_arg = DeclareLaunchArgument(
+        'use_slam', 
+        default_value='false',
+        description='Use SLAM',
+    )
+
     # Add gazebo world launch argument
     world_arg = DeclareLaunchArgument(
         'world', 
@@ -62,12 +69,6 @@ def generate_launch_description() -> LaunchDescription:
         description='Gazebo world file',
     )
 
-    # Add slam_params_file arg for slam_toolbox
-    slam_params_file = DeclareLaunchArgument(
-        'slam_params_file',
-        default_value='src/ors_robot/config/mapper_params_online_async.yaml',
-        description='Path to the ROS2 parameters file for the SLAM Toolbox',
-    )
 
     # Use xacro to process the file
     xacro_file = os.path.join(get_package_share_directory(pkg_name),file_subpath)
@@ -100,6 +101,13 @@ def generate_launch_description() -> LaunchDescription:
                     '-entity', 'ors_robot'],
         output='screen')
 
+    # Add slam_params_file arg for slam_toolbox
+    slam_params_file = DeclareLaunchArgument(
+        'slam_params_file',
+        default_value='src/ors_robot/config/mapper_params_online_async.yaml',
+        description='Path to the ROS2 parameters file for the SLAM Toolbox',
+    )
+
     # Launch slam_toolbox node
     slam_toolbox = IncludeLaunchDescription(
         PythonLaunchDescriptionSource([os.path.join(
@@ -109,8 +117,30 @@ def generate_launch_description() -> LaunchDescription:
             'use_sim_time': 'true'
         }.items(),
         condition=IfCondition(LaunchConfiguration('sim'))
+
     )
 
+
+    # Launch nav2 node
+    nav2 = IncludeLaunchDescription(
+        PythonLaunchDescriptionSource(os.path.join(
+            get_package_share_directory('nav2_bringup'), 
+            'launch', 'navigation_launch.py')),
+        launch_arguments={
+            'use_sim_time': 'true',
+            'autostart': 'true'
+        }.items(),
+        condition=IfCondition(LaunchConfiguration('sim'))
+    )
+
+
+    twist_mux_params = os.path.join(get_package_share_directory(pkg_name),'config','twist_mux.yaml')
+    twist_mux = Node(
+        package="twist_mux",
+        executable="twist_mux",
+        parameters=[twist_mux_params, {'use_sim_time': True}],
+        remappings=[('/cmd_vel_out','/diff_cont/cmd_vel_unstamped')]
+    )
 
     slamtec_publisher = Node(
         package='slamtec_publisher',
@@ -129,22 +159,15 @@ def generate_launch_description() -> LaunchDescription:
     # Run the node
     return LaunchDescription([
         world_arg,
+        sim_arg,
+        slam_arg,
+        twist_mux,
         gazebo,
         node_robot_state_publisher,
         spawn_entity,
-        sim_arg,
-        slamtec_publisher,
-        d435i_launch,
         slam_params_file,
         slam_toolbox,
-        # RegisterEventHandler(
-        #     OnProcessExit(
-        #         target_action=slamtec_publisher,
-        #         on_exit=[
-        #             EmitEvent(event=Shutdown(
-        #                     reason="Slamtec Publisher failed"
-        #             ))
-        #         ]
-        #     )
-        # )
+        nav2,
+        slamtec_publisher,
+        d435i_launch,
     ])

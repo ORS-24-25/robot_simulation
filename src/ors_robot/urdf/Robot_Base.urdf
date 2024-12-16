@@ -11,7 +11,7 @@
   <!-- Base Link -->
   <link name="base_link">
     <inertial>
-      <origin xyz="0.036054 -0.00042371 0.042377" rpy="0 0 0" />
+      <origin xyz="0 0 0" rpy="0 0 0" />
       <mass value="3.805" />
       <inertia ixx="0.030279" ixy="0.00049403" ixz="0.00087797" iyy="0.018392" iyz="3.9043E-05" izz="0.045468"/>
     </inertial>
