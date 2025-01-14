@@ -102,6 +102,7 @@ class SlamtecPublisher(Node):
 
         # Initialize Slamtec Mapper
         self.slamtec = SlamtecMapper(host=host, port=port)
+        self.slamtec.clear_map()
 
         # Publish static transforms
         self.publish_static_transforms()
@@ -109,8 +110,7 @@ class SlamtecPublisher(Node):
         # Check connection. \\ How often to do this?
         self.create_timer(1, self.slamtec.check_connection)
 
-        self.get_logger().info("Node started succesfully")
-
+        self.get_logger().info("slamtec_publisher node started succesfully")
 
     def publish_static_transforms(self):
         """
@@ -133,9 +133,22 @@ class SlamtecPublisher(Node):
         t1.transform.rotation.z = 0.0
         t1.transform.rotation.w = 1.0
 
+        # Static transform: odom -> base_link
+        t2 = TransformStamped()
+        t2.header.stamp = now
+        t2.header.frame_id = self.odom_frame
+        t2.child_frame_id = self.base_frame
+        t2.transform.translation.x = 0.0
+        t2.transform.translation.y = 0.0
+        t2.transform.translation.z = 0.0
+        t2.transform.rotation.x = 0.0
+        t2.transform.rotation.y = 0.0
+        t2.transform.rotation.z = 0.0
+        t2.transform.rotation.w = 1.0
+
         # Publish static transforms
         self.static_tf_broadcaster.sendTransform(
-            [t1]
+            [t1, t2]
         )
 
         # self.get_logger().info('Published static transforms: base_link -> plate and odom -> base_link')
@@ -184,7 +197,6 @@ class SlamtecPublisher(Node):
 
         self.scan_publisher_.publish(msg)
 
-
     def publish_map(self):
         """
         Publish occupancy grid map to /map.
@@ -195,8 +207,10 @@ class SlamtecPublisher(Node):
         # Get map data from M2M2
         try:
             map_data = self.slamtec.get_map_data()
-        except:
+        except BaseException as e:
+            self.get_logger().error(f"Failed to get map data: {e}")
             self.slamtec.check_connection()
+            return
         
         # Create OccupancyGrid message
         msg = OccupancyGrid()
@@ -211,8 +225,10 @@ class SlamtecPublisher(Node):
         # Center map on robot's initial position
         pose = self.slamtec.get_pose()
         # Transform from odom to map
-        msg.info.origin.position.x = pose['x'] - (msg.info.width * msg.info.resolution / 2.0)
-        msg.info.origin.position.y = pose['y'] - (msg.info.height * msg.info.resolution / 2.0)
+        # msg.info.origin.position.x = pose['x'] - (msg.info.width * msg.info.resolution / 2.0)
+        msg.info.origin.position.x = 0.0
+        # msg.info.origin.position.y = pose['y'] - (msg.info.height * msg.info.resolution / 2.0)
+        msg.info.origin.position.y = 0.0
         msg.info.origin.orientation.w = 1.0
         
         # Convert map data to 1D grid
@@ -232,45 +248,65 @@ class SlamtecPublisher(Node):
         # self.get_logger().info(f'Publishing map with {len(grid_data)} cells')
         self.map_publisher_.publish(msg)
 
-
     def publish_pose(self):
         """
-        Publish the robot's pose.
-
-        This method retrieves the robot's pose from the Slamtec Mapper and publishes it
-        as a PoseStamped message. It also broadcasts the dynamic transform between
-        the map and odom frames.
+        Publish the robot's pose as both a TransformStamped and a PoseStamped message.
+        It also broadcasts the dynamic transform between the map and odom frames.
         """
         try:
             pose_data = self.slamtec.get_pose()
-        except:
+        except BaseException as e:
+            self.get_logger().error(f"Failed to get pose data: {e}")
             self.slamtec.check_connection()
+            return
         
-        # Extract pose data
-        x = float(pose_data['x'])
-        y = float(pose_data['y'])
-        yaw = float(pose_data['yaw'])
-        
-        # Transform: map -> odom (dynamic)
-        t = TransformStamped()
-        t.header.stamp = self.get_clock().now().to_msg()
-        t.header.frame_id = self.map_frame
-        t.child_frame_id = self.odom_frame
-        t.transform.translation.x = x
-        t.transform.translation.y = y
-        t.transform.translation.z = 0.0
+        if not pose_data:
+            self.get_logger().warn("Pose data is empty.")
+            return
 
+        # Extract pose data
+        try:
+            x = float(pose_data['x'])
+            y = float(pose_data['y'])
+            yaw = float(pose_data['yaw'])
+        except (KeyError, ValueError) as e:
+            self.get_logger().error(f"Invalid pose data format: {e}")
+            return
+        
+        # --- Publish TransformStamped: (dynamic map -> odom) ---
+        transform = TransformStamped()
+        transform.header.stamp = self.get_clock().now().to_msg()
+        transform.header.frame_id = self.map_frame
+        transform.child_frame_id = self.odom_frame
+        transform.transform.translation.x = x
+        transform.transform.translation.y = y
+        transform.transform.translation.z = 0.0
         # Calculate the rotation quaternion from yaw
         siny_cosp = math.sin(yaw / 2.0)
         cosy_cosp = math.cos(yaw / 2.0)
-        t.transform.rotation.x = 0.0
-        t.transform.rotation.y = 0.0
-        t.transform.rotation.z = siny_cosp
-        t.transform.rotation.w = cosy_cosp
+        transform.transform.rotation.x = 0.0
+        transform.transform.rotation.y = 0.0
+        transform.transform.rotation.z = siny_cosp
+        transform.transform.rotation.w = cosy_cosp
 
         # Publish the transform
-        self.tf_broadcaster.sendTransform(t)
+        self.tf_broadcaster.sendTransform(transform)
 
+        # --- Publish PoseStamped ---
+        pose_msg = PoseStamped()
+        pose_msg.header.stamp = self.get_clock().now().to_msg()
+        pose_msg.header.frame_id = self.map_frame  # Frame relative to which pose is defined
+        pose_msg.pose.position.x = x
+        pose_msg.pose.position.y = y
+        pose_msg.pose.position.z = 0.0
+        pose_msg.pose.orientation.x = 0.0
+        pose_msg.pose.orientation.y = 0.0
+        pose_msg.pose.orientation.z = siny_cosp
+        pose_msg.pose.orientation.w = cosy_cosp
+
+        # Publish PoseStamped
+        self.pose_publisher_.publish(pose_msg)
+        # self.get_logger().debug("Published PoseStamped message")
 
 def main(args=None):
     """

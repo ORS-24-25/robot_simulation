@@ -474,13 +474,26 @@ if __name__ == '__main__':
     """
     # """
     # st.get_all()
-    map_data = st.get_map_data()
+    # map_data = st.get_map_data()
     # p = Path("./map_data.txt")
     # p.write_text(map_data)
-    show_map(map_data)
+    # show_map(map_data)
 
     # laser_data = st.get_laser_scan()
-    show_summary(st)
+    # show_summary(st)
+
+    print("\n---Clearing Map---\n")
+    print(st.clear_map())
+
+    print("\n---SetLocalization---\n")
+    print(st.set_localization(True))
+
+    print("\n---Localization--- \n")
+    print(st.get_localization())
+
+    print("\n---Pose---\n")
+    print(st.get_pose())
+
     # """
     if "--clear-map" in sys.argv:
         st.clear_map()
