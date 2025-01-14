@@ -1,42 +1,44 @@
 <?xml version="1.0"?>
-<robot xmlns:xacro="http://www.ros.org/wiki/xacro" >
+<robot xmlns:xacro="http://www.ros.org/wiki/xacro"  name="robot">
 
-  <link name="M2M2_LIDAR">
-    <inertial>
-      <origin xyz="-0.0011981 -0.0001963 -0.067684" rpy="0 0 0" />
-      <mass value="0.14455" />
-      <inertia ixx="0.00016736" ixy="3.546E-08" ixz="1.4853E-08" iyy="0.00016695" iyz="4.7103E-08" izz="0.00018995" />
-    </inertial>
-    <visual>
-      <origin xyz="0 0 0" rpy="0 0 0" />
-      <geometry>
-        <mesh filename="file://$(find ors_robot)/meshes/M2M2_LIDAR.STL" />
-      </geometry>
-      <material name="">
-        <color rgba="0.79216 0.81961 0.93333 1" />
-      </material>
-    </visual>
-    <collision>
-      <origin xyz="0 0 0" rpy="0 0 0" />
-      <geometry>
-        <mesh filename="file://$(find ors_robot)/meshes/M2M2_LIDAR.STL" />
-      </geometry>
-    </collision>
-  </link>
-  <joint name="M2M2_LIDAR" type="fixed">
-    <origin xyz="0.0016059 4.6046E-05 0.1054" rpy="0 0 0" />
-    <parent link="plate" />
-    <child link="M2M2_LIDAR" />
-    <axis xyz="0 0 0" />
-  </joint>
+    <!-- Add a joint and link to locate LiDar within our robot -->
+    <joint name="laser_joint" type="fixed">
+        <parent link="chassis"/>
+        <child link="laser_frame"/>
+        <!-- Place origin of laser link at the top of the robot -->
+        <origin xyz="0.1 0 0.175" rpy="0 0 0"/>
+    </joint>
 
-    <gazebo reference="M2M2_LIDAR">
+    <link name="laser_frame">
+        <visual>
+            <geometry>
+                <cylinder radius="0.05" length="0.05"/>
+            </geometry>
+            <material name="red"/>
+        </visual>
+        <collision>
+            <geometry>
+                <cylinder radius="0.05" length="0.05"/>
+            </geometry>
+        </collision>
+        <xacro:inertial_cylinder mass="0.1" length="0.4" radius="0.05">
+            <origin xyz="0 0 0" rpy="0 0 0"/>
+        </xacro:inertial_cylinder>
+    </link>
+
+    <!-- Add a gazebo tag to simulate the LiDar -->
+    <gazebo reference="laser_frame">
+        <!-- Set the color of the LiDar. The color for the link sets color in rviz, not Gazebo -->
         <material>Gazebo/Red</material>
 
+        <!-- Ray sensor is a scanning LiDar -->
         <sensor name="laser" type="ray">
+            <!-- Origin of the sensor is at the center of the link -->
             <pose> 0 0 0 0 0 0 </pose>
             <visualize>false</visualize>
+            <!-- Update 10 times / second -->
             <update_rate>10</update_rate>
+            <!-- Specify paramters for the virtual sensor -->
             <ray>
                 <scan>
                     <horizontal>
@@ -47,15 +49,18 @@
                 </scan>
                 <range>
                     <min>0.3</min>
-                    <max>20</max>
+                    <max>12</max>
                 </range>
             </ray>
+            <!-- Plug in to publish the gazebo ray sensor to ROS topics -->
             <plugin name="laser_controller" filename="libgazebo_ros_ray_sensor.so">
+                <!-- What topic to publish onto (publish to scan) -->
                 <ros>
-                    <argument>--ros-args --remap ~/out:=scan</argument>
+                    <argument>~/out:=scan</argument>
                 </ros>
                 <output_type>sensor_msgs/LaserScan</output_type>
-                <frame_name>M2M2_LIDAR</frame_name>
+                <!-- What frame ID to put in the laser scan message -->
+                <frame_name>laser_frame</frame_name>
             </plugin>
         </sensor>
     </gazebo>
