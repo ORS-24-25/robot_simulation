@@ -132,7 +132,7 @@ def generate_launch_description() -> LaunchDescription:
         node_robot_state_publisher,
         spawn_entity,
         sim_arg,
-        rplidar,
         slam_params_file,
         slam_toolbox,
+        # rplidar,
     ])
