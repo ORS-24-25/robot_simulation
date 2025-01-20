@@ -11,7 +11,7 @@ setup(
             ['resource/' + package_name]),
         ('share/' + package_name, ['package.xml']),
     ],
-    install_requires=['setuptools', 'adafruit-circuitpython-rplidar', 'numpy'],
+    install_requires=['setuptools', 'Adafruit_CircuitPython_RPLIDAR', 'numpy'],
     zip_safe=True,
     maintainer='sstevenson',
     maintainer_email='sstevenson32@gatech.edu',
