@@ -10,11 +10,12 @@ class AdafruitRPLidarNode(Node):
         self.publisher_ = self.create_publisher(LaserScan, 'scan', 10)
 
         # Initialize RPLidar (adjust port as needed)
-        self.lidar = RPLidar(None, '/dev/ttyUSB0', timeout=3)
+        self.lidar = RPLidar(motor_pin=None, port='/dev/ttyUSB0', timeout=3, logging=True)
 
         # Prepare a LaserScan message template
         self.scan_data = [0.0]*360
         self.scan_msg = LaserScan()
+        self.scan_msg.header.stamp = self.get_clock().now().to_msg()
         self.scan_msg.header.frame_id = 'laser_frame'
         self.scan_msg.angle_min = 0.0
         self.scan_msg.angle_max = 2*pi
