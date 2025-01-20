@@ -32,6 +32,7 @@ setup(
     tests_require=['pytest'],
     entry_points={
         'console_scripts': [
+            'adafruit_rplidar_node = ors_robot.adafruit_rplidar_node:main',
         ],
     },
 )

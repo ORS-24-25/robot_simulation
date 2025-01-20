@@ -113,7 +113,7 @@ def generate_launch_description() -> LaunchDescription:
 
     rplidar = Node(
             package='ors_robot',
-            executable='rplidar.launch.py',
+            executable='adafruit_rplidar_node',
             name="adafruit_rplidar_node",
             output='screen',
         )
