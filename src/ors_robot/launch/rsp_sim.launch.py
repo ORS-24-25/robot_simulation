@@ -117,7 +117,7 @@ def generate_launch_description() -> LaunchDescription:
             name='rplidar_composition',
             output='screen',
             parameters=[{
-                'serial_port': '/dev/serial/by-path/pci-0000:04:00.3-usb-0:1:1.0-port0',  # Update this path as needed
+                'serial_port': '/dev/ttyUSB0',
                 'serial_baudrate': 115200,
                 'frame_id': 'laser_frame',
                 'angle_compensate': True
