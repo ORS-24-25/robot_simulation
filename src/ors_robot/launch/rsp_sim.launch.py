@@ -111,14 +111,18 @@ def generate_launch_description() -> LaunchDescription:
         condition=IfCondition(LaunchConfiguration('sim'))
     )
 
-
-    slamtec_publisher = Node(
-        package='slamtec_publisher',
-        executable='slamtec_publisher',
-        # name='slamtec_publisher_node',
-        output='screen',
-        condition=UnlessCondition(LaunchConfiguration('sim')),
-    )
+    rplidar = Node(
+            package='rplidar',
+            executable='rplidar_node',
+            name='rplidar_node',
+            output='screen',
+            parameters=[{
+                'serial_port': '/dev/ttyUSB0',
+                'serial_baudrate': 115200,
+                'frame_id': 'laser_frame',
+                'angle_compensate': True
+            }]
+        )
 
     # TODO: Add depth cam realsense node with launch condition
 
@@ -129,17 +133,7 @@ def generate_launch_description() -> LaunchDescription:
         node_robot_state_publisher,
         spawn_entity,
         sim_arg,
-        slamtec_publisher,
         slam_params_file,
         slam_toolbox,
-        # RegisterEventHandler(
-        #     OnProcessExit(
-        #         target_action=slamtec_publisher,
-        #         on_exit=[
-        #             EmitEvent(event=Shutdown(
-        #                     reason="Slamtec Publisher failed"
-        #             ))
-        #         ]
-        #     )
-        # )
+        rplidar,
     ])

@@ -5,3 +5,6 @@ Proffesor Mentor: Patricio Vela
 PhD Mentor: Devesh Nath
 
 Undergrad Students: Samir, Emil, Simon
+
+pip install Adafruit_CircuitPython_RPLIDAR
+pip install numpy
