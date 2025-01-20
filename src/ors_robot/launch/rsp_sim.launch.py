@@ -87,12 +87,16 @@ def generate_launch_description() -> LaunchDescription:
         ] # add other parameters here if required
     )
 
-
+    # Modify launch parameters to check for sim argument
+    # If sim is true, use gazebo_ros launch file
+    # If sim is false, use slamtec_publisher node
     gazebo = IncludeLaunchDescription(
-        PythonLaunchDescriptionSource([os.path.join(
-            get_package_share_directory('gazebo_ros'), 'launch'), '/gazebo.launch.py']),
-        launch_arguments={'world': LaunchConfiguration('world')}.items()
-        )
+        PythonLaunchDescriptionSource(
+            [os.path.join(get_package_share_directory('gazebo_ros'), 'launch'), '/gazebo.launch.py']
+        ),
+        launch_arguments={'world': LaunchConfiguration('world')}.items(),
+        condition=IfCondition(LaunchConfiguration('sim'))
+    )
 
 
     spawn_entity = Node(package='gazebo_ros', executable='spawn_entity.py',
@@ -109,6 +113,15 @@ def generate_launch_description() -> LaunchDescription:
             'use_sim_time': 'true'
         }.items(),
         condition=IfCondition(LaunchConfiguration('sim'))
+    )
+
+    # Launch rviz2 node configured to check laser scan data
+    rviz2 = Node(
+        package='rviz2',
+        executable='rviz2',
+        name='rviz2',
+        output='screen',
+        arguments=['-d', os.path.join(get_package_share_directory(pkg_name), 'rviz', 'ors_robot.rviz')],
     )
 
     rplidar = Node(
@@ -129,11 +142,12 @@ def generate_launch_description() -> LaunchDescription:
     # Run the node
     return LaunchDescription([
         world_arg,
-        gazebo,
         node_robot_state_publisher,
         spawn_entity,
         sim_arg,
+        gazebo,
         slam_params_file,
         slam_toolbox,
         rplidar,
+        rviz2
     ])

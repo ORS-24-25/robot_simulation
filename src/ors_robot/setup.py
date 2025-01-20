@@ -22,6 +22,8 @@ setup(
         # (os.path.join('share', package_name, 'slamtec_publisher'), glob('../slamtec_publisher/*.py')),
         # Include world files
         (os.path.join('share', package_name, 'worlds'), glob('worlds/*.world')),
+        # Include rviz config files
+        (os.path.join('share', package_name, 'rviz'), glob('rviz/*.rviz')),
     ],
     install_requires=['setuptools'],
     zip_safe=True,
