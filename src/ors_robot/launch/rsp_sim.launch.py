@@ -112,10 +112,16 @@ def generate_launch_description() -> LaunchDescription:
     )
 
     rplidar = Node(
-            package='ors_robot',
-            executable='adafruit_rplidar_node',
-            name="adafruit_rplidar_node",
+            package='rplidar_ros',
+            executable='rplidar_composition',
+            name='rplidar_composition',
             output='screen',
+            parameters=[{
+                'serial_port': '/dev/serial/by-path/pci-0000:04:00.3-usb-0:1:1.0-port0',  # Update this path as needed
+                'serial_baudrate': 115200,
+                'frame_id': 'laser_frame',
+                'angle_compensate': True
+            }]
         )
 
     # TODO: Add depth cam realsense node with launch condition
