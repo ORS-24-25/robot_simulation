@@ -5,3 +5,11 @@ Proffesor Mentor: Patricio Vela
 PhD Mentor: Devesh Nath
 
 Undergrad Students: Samir, Emil, Simon
+
+1. Make a virtual env and activate it
+    virtualenv -p python3 ./venv
+    source ./venv/bin/activate
+2. Make sure that colcon doesn’t try to build the venv
+    touch ./venv/COLCON_IGNORE
+3. Install packages
+    python3 -m pip install Adafruit_CircuitPython_RPLIDAR
