@@ -36,7 +36,6 @@ class AdafruitRPLidarNode(Node):
             self.scan_msg.header.stamp = self.get_clock().now().to_msg()
             self.scan_msg.ranges = self.scan_data
             self.publisher_.publish(self.scan_msg)
-            break  # Process one scan then exit loop
 
 def main(args=None):
     rclpy.init(args=args)
