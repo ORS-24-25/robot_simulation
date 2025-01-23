@@ -129,6 +129,8 @@ def generate_launch_description() -> LaunchDescription:
             executable='rplidar_node',
             name='rplidar_node',
             output='screen',
+            respawn=True,
+            respawn_delay=0.1,
             parameters=[{
                 'serial_port': '/dev/ttyUSB0',
                 'serial_baudrate': 115200,
