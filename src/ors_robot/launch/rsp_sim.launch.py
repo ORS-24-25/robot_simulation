@@ -99,10 +99,13 @@ def generate_launch_description() -> LaunchDescription:
     )
 
 
-    spawn_entity = Node(package='gazebo_ros', executable='spawn_entity.py',
+    spawn_entity = Node(
+        package='gazebo_ros', executable='spawn_entity.py',
         arguments=['-topic', 'robot_description',
                     '-entity', 'ors_robot'],
-        output='screen')
+        output='screen',
+        condition=IfCondition(LaunchConfiguration('sim'))
+    )
 
     # Launch slam_toolbox node
     slam_toolbox = IncludeLaunchDescription(
@@ -136,7 +139,8 @@ def generate_launch_description() -> LaunchDescription:
                 'serial_baudrate': 115200,
                 'frame_id': 'laser_frame',
                 'angle_compensate': True
-            }]
+            }],
+            condition=UnlessCondition(LaunchConfiguration('sim'))
         )
 
     # TODO: Add depth cam realsense node with launch condition
