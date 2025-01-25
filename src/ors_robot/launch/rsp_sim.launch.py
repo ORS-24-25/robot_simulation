@@ -47,7 +47,6 @@ def generate_launch_description() -> LaunchDescription:
     pkg_name = 'ors_robot'
     file_subpath = 'urdf/robot.urdf.xacro'
 
-
     # Add sim launch argument
     sim_arg = DeclareLaunchArgument(
         'sim', 
@@ -73,7 +72,6 @@ def generate_launch_description() -> LaunchDescription:
     xacro_file = os.path.join(get_package_share_directory(pkg_name),file_subpath)
     robot_description_raw = xacro.process_file(xacro_file).toxml()
 
-
     # Configure the robot state publisher node
     node_robot_state_publisher = Node(
         package='robot_state_publisher',
@@ -98,7 +96,6 @@ def generate_launch_description() -> LaunchDescription:
         condition=IfCondition(LaunchConfiguration('sim'))
     )
 
-
     spawn_entity = Node(
         package='gazebo_ros', executable='spawn_entity.py',
         arguments=['-topic', 'robot_description',
@@ -119,16 +116,6 @@ def generate_launch_description() -> LaunchDescription:
         }.items(),
         condition=IfCondition(LaunchConfiguration('sim'))
     )
-    # slam_toolbox = Node(
-    #     parameters=[
-    #         slam_params_file,
-    #         {'use_sim_time': LaunchConfiguration('sim')}
-    #     ],
-    #     package='slam_toolbox',
-    #     executable='async_slam_toolbox_node',
-    #     name='slam_toolbox',
-    #     output='screen'
-    # )
 
     # Launch rviz2 node configured to check laser scan data
     rviz2 = Node(
