@@ -82,7 +82,7 @@ def generate_launch_description() -> LaunchDescription:
         parameters=[
             {
                 'robot_description': robot_description_raw,
-                'use_sim_time': True
+                'use_sim_time': LaunchConfiguration('sim')
             }
         ] # add other parameters here if required
     )
@@ -109,14 +109,26 @@ def generate_launch_description() -> LaunchDescription:
 
     # Launch slam_toolbox node
     slam_toolbox = IncludeLaunchDescription(
-        PythonLaunchDescriptionSource([os.path.join(
-            get_package_share_directory('slam_toolbox'), 'launch'), '/online_async_launch.py']),
+        PythonLaunchDescriptionSource([
+            os.path.join(
+            get_package_share_directory('slam_toolbox'), 'launch'), '/online_async_launch.py'
+        ]),
         launch_arguments={
             'params_file': LaunchConfiguration('slam_params_file'),
-            'use_sim_time': 'true'
+            'use_sim_time': LaunchConfiguration('sim')
         }.items(),
         condition=IfCondition(LaunchConfiguration('sim'))
     )
+    # slam_toolbox = Node(
+    #     parameters=[
+    #         slam_params_file,
+    #         {'use_sim_time': LaunchConfiguration('sim')}
+    #     ],
+    #     package='slam_toolbox',
+    #     executable='async_slam_toolbox_node',
+    #     name='slam_toolbox',
+    #     output='screen'
+    # )
 
     # Launch rviz2 node configured to check laser scan data
     rviz2 = Node(
