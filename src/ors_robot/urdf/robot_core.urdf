@@ -10,6 +10,20 @@
 
   <!-- Base Link -->
   <link name="base_link">
+  </link>
+
+  <!-- Base Footprint Link -->
+  <joint name="base_footprint_joint" type="fixed">
+      <parent link="base_link"/>
+      <child link="base_footprint"/>
+      <origin xyz="0 0 0" rpy="0 0 0"/>
+  </joint>
+
+  <link name="base_footprint">
+  </link>
+
+  <!-- Chassis Link -->
+  <link name="chassis">
     <inertial>
       <origin xyz="0.036054 -0.00042371 0.042377" rpy="0 0 0" />
       <mass value="3.805" />
@@ -40,6 +54,12 @@
     </collision>
   </link>
 
+  <joint name="chassis_joint" type="fixed">
+    <parent link="base_link" />
+    <child link="chassis" />
+    <origin xyz="0 0 0.042377"/>
+  </joint>
+
   <!-- Left Wheel Link -->
   <link name="left_wheel">
     <inertial>
@@ -63,6 +83,7 @@
       </geometry>
     </collision>
   </link>
+
   <joint name="left_wheel_joint" type="continuous">
     <origin xyz="-0.012911 0.11755 0.025329" rpy="-1.5707963267949 1.5707963267949 0" />
     <parent link="base_link" />
@@ -98,6 +119,7 @@
       </geometry>
     </collision>
   </link>
+
   <joint name="right_wheel_joint" type="continuous">
     <origin xyz="-0.012911 -0.11766 0.025329" rpy="-1.5708 0 0" />
     <parent link="base_link" />
@@ -130,6 +152,7 @@
       </geometry>
     </collision>
   </link>
+
   <joint name="front_wheel_joint" type="continuous">
     <origin xyz="0.11327 5.4824E-05 0.0013288" rpy="0 0 0" />
     <parent link="base_link" />
@@ -162,6 +185,7 @@
       </geometry>
     </collision>
   </link>
+
   <joint name="plate" type="fixed">
     <origin xyz="-0.012717 3.0744E-05 0.23383" rpy="0 0 0" />
     <parent link="base_link" />
@@ -169,13 +193,4 @@
     <axis xyz="0 0 0" />
   </joint>
 
-  <!-- Base Footprint Link -->
-    <link name="base_footprint">
-    </link>
-    
-    <joint name="base_footprint_joint" type="fixed">
-        <parent link="base_link"/>
-        <child link="base_footprint"/>
-        <origin xyz="0 0 0" rpy="0 0 0"/>
-    </joint>
 </robot>
