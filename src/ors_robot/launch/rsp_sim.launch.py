@@ -47,7 +47,6 @@ def generate_launch_description() -> LaunchDescription:
     pkg_name = 'ors_robot'
     file_subpath = 'urdf/robot.urdf.xacro'
 
-
     # Add sim launch argument
     sim_arg = DeclareLaunchArgument(
         'sim', 
@@ -69,10 +68,16 @@ def generate_launch_description() -> LaunchDescription:
         description='Path to the ROS2 parameters file for the SLAM Toolbox',
     )
 
+    # Add nav2_params arg for nav2
+    nav2_params_file = DeclareLaunchArgument(
+        'nav2_params_file',
+        default_value='src/ors_robot/config/nav2_params.yaml',
+        description='Path to the ROS2 parameters file for the Nav2 stack',
+    )
+
     # Use xacro to process the file
     xacro_file = os.path.join(get_package_share_directory(pkg_name),file_subpath)
     robot_description_raw = xacro.process_file(xacro_file).toxml()
-
 
     # Configure the robot state publisher node
     node_robot_state_publisher = Node(
@@ -82,33 +87,76 @@ def generate_launch_description() -> LaunchDescription:
         parameters=[
             {
                 'robot_description': robot_description_raw,
-                'use_sim_time': True
+                'use_sim_time': LaunchConfiguration('sim')
             }
         ] # add other parameters here if required
     )
 
-
+    # Modify launch parameters to check for sim argument
+    # If sim is true, use gazebo_ros launch file
+    # If sim is false, use slamtec_publisher node
     gazebo = IncludeLaunchDescription(
-        PythonLaunchDescriptionSource([os.path.join(
-            get_package_share_directory('gazebo_ros'), 'launch'), '/gazebo.launch.py']),
-        launch_arguments={'world': LaunchConfiguration('world')}.items()
-        )
+        PythonLaunchDescriptionSource(
+            [os.path.join(get_package_share_directory('gazebo_ros'), 'launch'), '/gazebo.launch.py']
+        ),
+        launch_arguments={'world': LaunchConfiguration('world')}.items(),
+        condition=IfCondition(LaunchConfiguration('sim'))
+    )
 
-
-    spawn_entity = Node(package='gazebo_ros', executable='spawn_entity.py',
+    spawn_entity = Node(
+        package='gazebo_ros', executable='spawn_entity.py',
         arguments=['-topic', 'robot_description',
                     '-entity', 'ors_robot'],
-        output='screen')
+        output='screen',
+        condition=IfCondition(LaunchConfiguration('sim'))
+    )
 
     # Launch slam_toolbox node
     slam_toolbox = IncludeLaunchDescription(
-        PythonLaunchDescriptionSource([os.path.join(
-            get_package_share_directory('slam_toolbox'), 'launch'), '/online_async_launch.py']),
+        PythonLaunchDescriptionSource([
+            os.path.join(
+            get_package_share_directory('slam_toolbox'), 'launch'), '/online_async_launch.py'
+        ]),
         launch_arguments={
             'params_file': LaunchConfiguration('slam_params_file'),
-            'use_sim_time': 'true'
+            'use_sim_time': LaunchConfiguration('sim')
         }.items(),
         condition=IfCondition(LaunchConfiguration('sim'))
+    )
+
+    # Twist mux node
+    twist_mux = Node(
+        package='twist_mux',
+        executable='twist_mux',
+        name='twist_mux',
+        output='screen',
+        parameters=[{
+            'params_file': os.path.join(get_package_share_directory(pkg_name), 'config', '/twist_mux.yaml'),
+            'cmd_vel_out': 'diff_cont/cmd_vel_unstamped',
+            'use_sim_time': LaunchConfiguration('sim')
+        }],
+        condition=IfCondition(LaunchConfiguration('sim'))
+    )
+
+    # Launch nav2 node
+    nav2 = IncludeLaunchDescription(
+        PythonLaunchDescriptionSource([
+            os.path.join(get_package_share_directory('nav2_bringup'), 'launch'), '/navigation_launch.py'
+        ]),
+        launch_arguments={
+            'params_file': LaunchConfiguration('nav2_params_file'),
+            'use_sim_time': LaunchConfiguration('sim')
+        }.items(),
+        condition=IfCondition(LaunchConfiguration('sim'))
+    )
+
+    # Launch rviz2 node configured to check laser scan data
+    rviz2 = Node(
+        package='rviz2',
+        executable='rviz2',
+        name='rviz2',
+        output='screen',
+        arguments=['-d', os.path.join(get_package_share_directory(pkg_name), 'rviz', 'ors_robot.rviz')],
     )
 
     rplidar = Node(
@@ -116,12 +164,15 @@ def generate_launch_description() -> LaunchDescription:
             executable='rplidar_node',
             name='rplidar_node',
             output='screen',
+            respawn=True,
+            respawn_delay=0.1,
             parameters=[{
                 'serial_port': '/dev/ttyUSB0',
                 'serial_baudrate': 115200,
                 'frame_id': 'laser_frame',
                 'angle_compensate': True
-            }]
+            }],
+            condition=UnlessCondition(LaunchConfiguration('sim'))
         )
 
     # TODO: Add depth cam realsense node with launch condition
@@ -129,11 +180,15 @@ def generate_launch_description() -> LaunchDescription:
     # Run the node
     return LaunchDescription([
         world_arg,
-        gazebo,
         node_robot_state_publisher,
         spawn_entity,
         sim_arg,
+        gazebo,
+        twist_mux,
         slam_params_file,
         slam_toolbox,
+        nav2_params_file,
+        nav2,
         rplidar,
+        rviz2
     ])

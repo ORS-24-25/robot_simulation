@@ -27,6 +27,18 @@ class AdafruitRPLidarNode(Node):
         self.scan_timer = self.create_timer(0.1, self.scan_callback)
 
     def scan_callback(self):
+        # while (self.lidar.motor == False):
+        #     self.lidar.connect()
+        #if self.lidar.health[1] != 0 :
+        #self.get_logger().debug("motor is moving")
+        # try:
+        #     if not self.scan_msg.ranges:
+        #         raise ValueError("empty scan msg")
+        # except Exception as e:
+        #     self.get_logger().info("RPLIDAR error")
+            
+            
+
         # Read one scan set
         for scan in self.lidar.iter_scans():
             for (_, angle, dist_mm) in scan:
