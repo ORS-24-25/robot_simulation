@@ -68,6 +68,13 @@ def generate_launch_description() -> LaunchDescription:
         description='Path to the ROS2 parameters file for the SLAM Toolbox',
     )
 
+    # Add nav2_params arg for nav2
+    nav2_params_file = DeclareLaunchArgument(
+        'nav2_params_file',
+        default_value='src/ors_robot/config/nav2_params.yaml',
+        description='Path to the ROS2 parameters file for the Nav2 stack',
+    )
+
     # Use xacro to process the file
     xacro_file = os.path.join(get_package_share_directory(pkg_name),file_subpath)
     robot_description_raw = xacro.process_file(xacro_file).toxml()
@@ -117,6 +124,32 @@ def generate_launch_description() -> LaunchDescription:
         condition=IfCondition(LaunchConfiguration('sim'))
     )
 
+    # Twist mux node
+    twist_mux = Node(
+        package='twist_mux',
+        executable='twist_mux',
+        name='twist_mux',
+        output='screen',
+        parameters=[{
+            'params_file': os.path.join(get_package_share_directory(pkg_name), 'config', '/twist_mux.yaml'),
+            'cmd_vel_out': 'diff_cont/cmd_vel_unstamped',
+            'use_sim_time': LaunchConfiguration('sim')
+        }],
+        condition=IfCondition(LaunchConfiguration('sim'))
+    )
+
+    # Launch nav2 node
+    nav2 = IncludeLaunchDescription(
+        PythonLaunchDescriptionSource([
+            os.path.join(get_package_share_directory('nav2_bringup'), 'launch'), '/navigation_launch.py'
+        ]),
+        launch_arguments={
+            'params_file': LaunchConfiguration('nav2_params_file'),
+            'use_sim_time': LaunchConfiguration('sim')
+        }.items(),
+        condition=IfCondition(LaunchConfiguration('sim'))
+    )
+
     # Launch rviz2 node configured to check laser scan data
     rviz2 = Node(
         package='rviz2',
@@ -151,8 +184,11 @@ def generate_launch_description() -> LaunchDescription:
         spawn_entity,
         sim_arg,
         gazebo,
+        twist_mux,
         slam_params_file,
         slam_toolbox,
+        nav2_params_file,
+        nav2,
         rplidar,
         rviz2
     ])
