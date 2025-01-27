@@ -1,0 +1,10 @@
+teleop_twist_joy:
+  ros__parameters:
+    enable_turbo: false
+    enable_button: 4  # 'Options' button on PS4 controller
+    axis_linear: 1    # Left stick vertical axis
+    scale_linear: 0.5
+    axis_angular: 0   # Left stick horizontal axis
+    scale_angular: 1.0
+    cmd_vel_out: "cmd_vel_joy"
+    use_sim_time: true

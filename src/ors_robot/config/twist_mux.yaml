@@ -1,5 +1,6 @@
 twist_mux:
   ros__parameters:
+    cmd_vel_out: "diff_cont/cmd_vel_unstamped"
     topics:
       navigation:
         topic   : cmd_vel
