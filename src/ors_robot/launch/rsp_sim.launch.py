@@ -171,28 +171,28 @@ def generate_launch_description() -> LaunchDescription:
             condition=UnlessCondition(LaunchConfiguration('sim'))
         )
 
-    # Launch joy_node
-    joy_node = Node(
-        package='joy',
-        executable='joy_node',
-        name='joy_node',
-        output='screen',
-        parameters=[{
-            'dev': '/dev/input/js0',  # Adjust if necessary
-            'deadzone': 0.05,
-            'autorepeat_rate': 20.0,
-            'use_sim_time': LaunchConfiguration('sim')
-        }]
-    )
+    # # Launch joy_node
+    # joy_node = Node(
+    #     package='joy',
+    #     executable='joy_node',
+    #     name='joy_node',
+    #     output='screen',
+    #     parameters=[{
+    #         'dev': '/dev/input/js0',  # Adjust if necessary
+    #         'deadzone': 0.05,
+    #         'autorepeat_rate': 20.0,
+    #         'use_sim_time': LaunchConfiguration('sim')
+    #     }]
+    # )
 
-    # Launch teleop_twist_joy node
-    teleop_twist_joy = Node(
-        package='teleop_twist_joy',
-        executable='teleop_node',
-        name='teleop_twist_joy',
-        output='screen',
-        parameters=[os.path.join(get_package_share_directory(pkg_name), 'config', 'teleop_twist_joy.yaml')]
-    )
+    # # Launch teleop_twist_joy node
+    # teleop_twist_joy = Node(
+    #     package='teleop_twist_joy',
+    #     executable='teleop_node',
+    #     name='teleop_twist_joy',
+    #     output='screen',
+    #     parameters=[os.path.join(get_package_share_directory(pkg_name), 'config', 'teleop_twist_joy.yaml')]
+    # )
 
     # TODO: Add depth cam realsense node with launch condition
 
@@ -203,8 +203,8 @@ def generate_launch_description() -> LaunchDescription:
         spawn_entity,
         sim_arg,
         gazebo,
-        joy_node,
-        teleop_twist_joy,
+        # joy_node,
+        # teleop_twist_joy,
         twist_mux,
         slam_params_file,
         slam_toolbox,
