@@ -120,8 +120,7 @@ def generate_launch_description() -> LaunchDescription:
         launch_arguments={
             'params_file': LaunchConfiguration('slam_params_file'),
             'use_sim_time': LaunchConfiguration('sim')
-        }.items(),
-        condition=IfCondition(LaunchConfiguration('sim'))
+        }.items()
     )
 
     # Twist mux node
@@ -134,8 +133,7 @@ def generate_launch_description() -> LaunchDescription:
             'params_file': os.path.join(get_package_share_directory(pkg_name), 'config', '/twist_mux.yaml'),
             'cmd_vel_out': 'diff_cont/cmd_vel_unstamped',
             'use_sim_time': LaunchConfiguration('sim')
-        }],
-        condition=IfCondition(LaunchConfiguration('sim'))
+        }]
     )
 
     # Launch nav2 node
@@ -146,8 +144,7 @@ def generate_launch_description() -> LaunchDescription:
         launch_arguments={
             'params_file': LaunchConfiguration('nav2_params_file'),
             'use_sim_time': LaunchConfiguration('sim')
-        }.items(),
-        condition=IfCondition(LaunchConfiguration('sim'))
+        }.items()
     )
 
     # Launch rviz2 node configured to check laser scan data
