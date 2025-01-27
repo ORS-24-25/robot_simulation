@@ -24,6 +24,7 @@ setup(
         (os.path.join('share', package_name, 'worlds'), glob('worlds/*.world')),
         # Include rviz config files
         (os.path.join('share', package_name, 'rviz'), glob('rviz/*.rviz')),
+        (os.path.join('share', package_name, 'config'), glob('config/*.yaml'))
     ],
     install_requires=['setuptools'],
     zip_safe=True,
