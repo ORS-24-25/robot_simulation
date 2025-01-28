@@ -25,8 +25,8 @@ class AdafruitRPLidarNode(Node):
         self.scan_msg = LaserScan()
         self.scan_msg.header.stamp = self.get_clock().now().to_msg()
         self.scan_msg.header.frame_id = 'laser_frame'
-        self.scan_msg.angle_min = 0.0
-        self.scan_msg.angle_max = 2*pi
+        self.scan_msg.angle_min = -pi
+        self.scan_msg.angle_max = pi
         self.scan_msg.angle_increment = (2*pi)/360
         self.scan_msg.range_min = 0.12
         self.scan_msg.range_max = 8.0
@@ -48,14 +48,17 @@ class AdafruitRPLidarNode(Node):
             
 
         # Read one scan set
+        complete_scan = [0.0]*360
         for scan in self.lidar.iter_scans():
             for (_, angle, dist_mm) in scan:
                 idx = min(359, floor(angle))
-                self.scan_data[idx] = dist_mm / 1000.0  # Convert mm to meters
+                complete_scan[idx] = dist_mm / 1000.0  # Convert mm to meters
 
-            self.scan_msg.header.stamp = self.get_clock().now().to_msg()
-            self.scan_msg.ranges = self.scan_data
-            self.publisher_.publish(self.scan_msg)
+            if all(complete_scan):
+                self.scan_msg.header.stamp = self.get_clock().now().to_msg()
+                self.scan_msg.ranges = complete_scan
+                self.publisher_.publish(self.scan_msg)
+                complete_scan = [0.0]*360  # Reset for the next full scan
 
 def main(args=None):
     rclpy.init(args=args)
