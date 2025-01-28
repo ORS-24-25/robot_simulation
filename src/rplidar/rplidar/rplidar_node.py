@@ -32,7 +32,7 @@ class AdafruitRPLidarNode(Node):
         self.scan_msg.range_max = 8.0
 
         # Create a timer that executes the callback at 10 Hz
-        self.scan_timer = self.create_timer(0.2, self.scan_callback)
+        self.scan_timer = self.create_timer(0.1, self.scan_callback)
 
     def scan_callback(self):
         # while (self.lidar.motor == False):
