@@ -32,7 +32,7 @@ class AdafruitRPLidarNode(Node):
         self.scan_msg.range_max = 8.0
 
         # Create a timer that executes the callback at 10 Hz
-        self.scan_timer = self.create_timer(0.1, self.scan_callback)
+        self.scan_timer = self.create_timer(0.2, self.scan_callback)
 
     def scan_callback(self):
         # while (self.lidar.motor == False):
@@ -48,17 +48,14 @@ class AdafruitRPLidarNode(Node):
             
 
         # Read one scan set
-        complete_scan = [0.0]*360
         for scan in self.lidar.iter_scans():
             for (_, angle, dist_mm) in scan:
                 idx = min(359, floor(angle))
-                complete_scan[idx] = dist_mm / 1000.0  # Convert mm to meters
+                self.scan_data[idx] = dist_mm / 1000.0  # Convert mm to meters
 
-            if all(complete_scan):
-                self.scan_msg.header.stamp = self.get_clock().now().to_msg()
-                self.scan_msg.ranges = complete_scan
-                self.publisher_.publish(self.scan_msg)
-                complete_scan = [0.0]*360  # Reset for the next full scan
+            self.scan_msg.header.stamp = self.get_clock().now().to_msg()
+            self.scan_msg.ranges = self.scan_data
+            self.publisher_.publish(self.scan_msg)
 
 def main(args=None):
     rclpy.init(args=args)
