@@ -54,10 +54,10 @@ def generate_launch_description() -> LaunchDescription:
         description='Use simulated config (not using M2M2)',
     )
 
-    mapping_arg = DeclareLaunchArgument(
-        'mapping',
-        default_value='false',
-        description='Map or localize, set to True to map'
+    slam_arg = DeclareLaunchArgument(
+        'slam_mode',
+        default_value='mapping',
+        description='Set slam_toolbox mode (mapping/localization)',
     )
 
     # Add gazebo world launch argument
@@ -99,8 +99,6 @@ def generate_launch_description() -> LaunchDescription:
     )
 
     # Modify launch parameters to check for sim argument
-    # If sim is true, use gazebo_ros launch file
-    # If sim is false, use slamtec_publisher node
     gazebo = IncludeLaunchDescription(
         PythonLaunchDescriptionSource(
             [os.path.join(get_package_share_directory('gazebo_ros'), 'launch'), '/gazebo.launch.py']
@@ -126,6 +124,7 @@ def generate_launch_description() -> LaunchDescription:
         launch_arguments={
             'params_file': LaunchConfiguration('slam_params_file'),
             'use_sim_time': LaunchConfiguration('sim'),
+            'mode': LaunchConfiguration('slam_mode')
         }.items()
     )
 
@@ -185,6 +184,7 @@ def generate_launch_description() -> LaunchDescription:
         node_robot_state_publisher,
         spawn_entity,
         sim_arg,
+        slam_arg,
         gazebo,
         twist_mux,
         slam_params_file,
