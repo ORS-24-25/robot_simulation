@@ -4,7 +4,7 @@ from launch import LaunchDescription
 from launch.actions import IncludeLaunchDescription, DeclareLaunchArgument, RegisterEventHandler, EmitEvent
 from launch.event_handlers import OnProcessExit
 from launch.events import Shutdown
-from launch.substitutions import LaunchConfiguration
+from launch.substitutions import LaunchConfiguration, PythonExpression
 from launch.conditions import IfCondition, UnlessCondition
 from launch.launch_description_sources import PythonLaunchDescriptionSource
 from launch_ros.actions import Node
@@ -56,7 +56,7 @@ def generate_launch_description() -> LaunchDescription:
 
     slam_arg = DeclareLaunchArgument(
         'slam_mode',
-        default_value='mapping',
+        default_value='localization',
         description='Set slam_toolbox mode (mapping/localization)',
     )
 
@@ -148,7 +148,10 @@ def generate_launch_description() -> LaunchDescription:
         launch_arguments={
             'params_file': LaunchConfiguration('nav2_params_file'),
             'use_sim_time': LaunchConfiguration('sim')
-        }.items()
+        }.items(),
+        condition=IfCondition(
+            PythonExpression(['\'localization\' in "', LaunchConfiguration('slam_mode'), '"'])
+        )
     )
 
     # Launch rviz2 node configured to check laser scan data
@@ -189,8 +192,8 @@ def generate_launch_description() -> LaunchDescription:
         twist_mux,
         slam_params_file,
         slam_toolbox,
-        # nav2_params_file,
-        # nav2,
+        nav2_params_file,
+        nav2,
         rplidar,
         rviz2
     ])
