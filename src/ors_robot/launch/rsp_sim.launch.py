@@ -54,6 +54,12 @@ def generate_launch_description() -> LaunchDescription:
         description='Use simulated config (not using M2M2)',
     )
 
+    mapping_arg = DeclareLaunchArgument(
+        'mapping',
+        default_value='false',
+        description='Map or localize, set to True to map'
+    )
+
     # Add gazebo world launch argument
     world_arg = DeclareLaunchArgument(
         'world', 
@@ -119,7 +125,7 @@ def generate_launch_description() -> LaunchDescription:
         ]),
         launch_arguments={
             'params_file': LaunchConfiguration('slam_params_file'),
-            'use_sim_time': LaunchConfiguration('sim')
+            'use_sim_time': LaunchConfiguration('sim'),
         }.items()
     )
 
@@ -171,29 +177,6 @@ def generate_launch_description() -> LaunchDescription:
             condition=UnlessCondition(LaunchConfiguration('sim'))
         )
 
-    # # Launch joy_node
-    # joy_node = Node(
-    #     package='joy',
-    #     executable='joy_node',
-    #     name='joy_node',
-    #     output='screen',
-    #     parameters=[{
-    #         'dev': '/dev/input/js0',  # Adjust if necessary
-    #         'deadzone': 0.05,
-    #         'autorepeat_rate': 20.0,
-    #         'use_sim_time': LaunchConfiguration('sim')
-    #     }]
-    # )
-
-    # # Launch teleop_twist_joy node
-    # teleop_twist_joy = Node(
-    #     package='teleop_twist_joy',
-    #     executable='teleop_node',
-    #     name='teleop_twist_joy',
-    #     output='screen',
-    #     parameters=[os.path.join(get_package_share_directory(pkg_name), 'config', 'teleop_twist_joy.yaml')]
-    # )
-
     # TODO: Add depth cam realsense node with launch condition
 
     # Run the node
@@ -203,13 +186,11 @@ def generate_launch_description() -> LaunchDescription:
         spawn_entity,
         sim_arg,
         gazebo,
-        # joy_node,
-        # teleop_twist_joy,
         twist_mux,
         slam_params_file,
         slam_toolbox,
-        nav2_params_file,
-        nav2,
+        # nav2_params_file,
+        # nav2,
         rplidar,
         rviz2
     ])
