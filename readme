@@ -6,5 +6,13 @@ PhD Mentor: Devesh Nath
 
 Undergrad Students: Samir, Emil, Simon
 
-pip install Adafruit_CircuitPython_RPLIDAR
-pip install numpy
+Required Installs
+Ros Packages:
+  sudo apt install -y ros-humble-irobot-create-msgs
+  sudo apt install -y ros-humble-irobot-create-msgs
+  TO DO: Slam, Nav2, ...
+
+
+Python
+  pip install Adafruit_CircuitPython_RPLIDAR
+  pip install numpy
