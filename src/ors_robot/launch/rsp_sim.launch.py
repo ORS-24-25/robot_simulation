@@ -177,9 +177,22 @@ def generate_launch_description() -> LaunchDescription:
                 'angle_compensate': True
             }],
             condition=UnlessCondition(LaunchConfiguration('sim'))
-        )
+    )
 
     # TODO: Add depth cam realsense node with launch condition
+
+    tf2_odom_broadcaster = Node(
+        package='tf2_ros',
+        executable='static_transform_publisher',
+        name='odom_to_base_footprint_broadcaster',
+        arguments=[
+            '0', '0', '0',      # x, y, z
+            '0', '0', '0',      # roll, pitch, yaw
+            'odom',
+            'base_link'
+        ],
+        condition=UnlessCondition(LaunchConfiguration('sim'))
+    )
 
     # Run the node
     return LaunchDescription([
@@ -189,11 +202,12 @@ def generate_launch_description() -> LaunchDescription:
         sim_arg,
         slam_arg,
         gazebo,
+        tf2_odom_broadcaster,
         twist_mux,
         slam_params_file,
         slam_toolbox,
         nav2_params_file,
         nav2,
         rplidar,
-        rviz2
+        rviz2,
     ])
