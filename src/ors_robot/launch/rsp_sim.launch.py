@@ -4,7 +4,7 @@ from launch import LaunchDescription
 from launch.actions import IncludeLaunchDescription, DeclareLaunchArgument, RegisterEventHandler, EmitEvent
 from launch.event_handlers import OnProcessExit
 from launch.events import Shutdown
-from launch.substitutions import LaunchConfiguration
+from launch.substitutions import LaunchConfiguration, PythonExpression
 from launch.conditions import IfCondition, UnlessCondition
 from launch.launch_description_sources import PythonLaunchDescriptionSource
 from launch_ros.actions import Node
@@ -54,6 +54,12 @@ def generate_launch_description() -> LaunchDescription:
         description='Use simulated config (not using M2M2)',
     )
 
+    slam_arg = DeclareLaunchArgument(
+        'slam_mode',
+        default_value='localization',
+        description='Set slam_toolbox mode (mapping/localization)',
+    )
+
     # Add gazebo world launch argument
     world_arg = DeclareLaunchArgument(
         'world', 
@@ -93,8 +99,6 @@ def generate_launch_description() -> LaunchDescription:
     )
 
     # Modify launch parameters to check for sim argument
-    # If sim is true, use gazebo_ros launch file
-    # If sim is false, use slamtec_publisher node
     gazebo = IncludeLaunchDescription(
         PythonLaunchDescriptionSource(
             [os.path.join(get_package_share_directory('gazebo_ros'), 'launch'), '/gazebo.launch.py']
@@ -119,9 +123,9 @@ def generate_launch_description() -> LaunchDescription:
         ]),
         launch_arguments={
             'params_file': LaunchConfiguration('slam_params_file'),
-            'use_sim_time': LaunchConfiguration('sim')
-        }.items(),
-        condition=IfCondition(LaunchConfiguration('sim'))
+            'use_sim_time': LaunchConfiguration('sim'),
+            'mode': LaunchConfiguration('slam_mode')
+        }.items()
     )
 
     # Twist mux node
@@ -131,11 +135,9 @@ def generate_launch_description() -> LaunchDescription:
         name='twist_mux',
         output='screen',
         parameters=[{
-            'params_file': os.path.join(get_package_share_directory(pkg_name), 'config', '/twist_mux.yaml'),
-            'cmd_vel_out': 'diff_cont/cmd_vel_unstamped',
+            'params_file': os.path.join(get_package_share_directory(pkg_name), 'config', 'twist_mux.yaml'),
             'use_sim_time': LaunchConfiguration('sim')
-        }],
-        condition=IfCondition(LaunchConfiguration('sim'))
+        }]
     )
 
     # Launch nav2 node
@@ -147,7 +149,9 @@ def generate_launch_description() -> LaunchDescription:
             'params_file': LaunchConfiguration('nav2_params_file'),
             'use_sim_time': LaunchConfiguration('sim')
         }.items(),
-        condition=IfCondition(LaunchConfiguration('sim'))
+        condition=IfCondition(
+            PythonExpression(['\'localization\' in "', LaunchConfiguration('slam_mode'), '"'])
+        )
     )
 
     # Launch rviz2 node configured to check laser scan data
@@ -173,9 +177,22 @@ def generate_launch_description() -> LaunchDescription:
                 'angle_compensate': True
             }],
             condition=UnlessCondition(LaunchConfiguration('sim'))
-        )
+    )
 
     # TODO: Add depth cam realsense node with launch condition
+
+    tf2_odom_broadcaster = Node(
+        package='tf2_ros',
+        executable='static_transform_publisher',
+        name='odom_to_base_footprint_broadcaster',
+        arguments=[
+            '0', '0', '0',      # x, y, z
+            '0', '0', '0',      # roll, pitch, yaw
+            'odom',
+            'base_link'
+        ],
+        condition=UnlessCondition(LaunchConfiguration('sim'))
+    )
 
     # Run the node
     return LaunchDescription([
@@ -183,12 +200,14 @@ def generate_launch_description() -> LaunchDescription:
         node_robot_state_publisher,
         spawn_entity,
         sim_arg,
+        slam_arg,
         gazebo,
+        tf2_odom_broadcaster,
         twist_mux,
         slam_params_file,
         slam_toolbox,
         nav2_params_file,
         nav2,
         rplidar,
-        rviz2
+        rviz2,
     ])
