@@ -25,3 +25,10 @@ Ros Packages:
     sudo apt install ros-humble-twist-mux
   LD LiDAR
     None required
+
+Jetson:
+  Intel RealSense
+    sudo apt install ros-humble-realsense2-camera
+  Intel librealsense
+    sudo apt-get install librealsense2-utils
+    sudo apt-get install librealsense2-dev
