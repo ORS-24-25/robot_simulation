@@ -65,7 +65,7 @@
     <link name="depth_cam_link_optical"></link>
 
 
-    <gazebo reference="depth_cam_link">
+    <!-- <gazebo reference="depth_cam_link">
         <sensor name="depth_cam" type="depth">
             <pose> 0 0 0 0 0 0 </pose>
             <visualize>false</visualize>
@@ -88,6 +88,6 @@
                 <max_depth>100.0</max_depth>
             </plugin>
         </sensor>
-    </gazebo>
+    </gazebo> -->
 
 </robot>

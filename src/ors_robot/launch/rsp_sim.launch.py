@@ -208,10 +208,10 @@ def generate_launch_description() -> LaunchDescription:
     # Run the node
     return LaunchDescription([
         world_arg,
-        node_robot_state_publisher,
-        spawn_entity,
         sim_arg,
         slam_arg,
+        node_robot_state_publisher,
+        spawn_entity,
         gazebo,
         tf2_odom_broadcaster,
         twist_mux,
