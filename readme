@@ -14,7 +14,8 @@ Ros Packages:
   SLAM Toolbox
     sudo apt install ros-humble-slam-toolbox
   NAV2
-    sudo apt install ros-humble-navigation2 ros-humble-nav2-bringup
+    sudo apt install ros-humble-navigation2
+    sudo apt install ros-humble-nav2-bringup
     sudo apt install ros-humble-twist-mux
   iRobot Create 3: [https://iroboteducation.github.io/create3_docs/setup/ubuntu2204/]
     sudo apt install -y ros-humble-irobot-create-msgs
