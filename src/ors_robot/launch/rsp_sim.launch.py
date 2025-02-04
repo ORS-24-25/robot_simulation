@@ -163,20 +163,31 @@ def generate_launch_description() -> LaunchDescription:
         arguments=['-d', os.path.join(get_package_share_directory(pkg_name), 'rviz', 'ors_robot.rviz')],
     )
 
-    rplidar = Node(
-            package='rplidar',
-            executable='rplidar_node',
-            name='rplidar_node',
-            output='screen',
-            respawn=True,
-            respawn_delay=0.1,
-            parameters=[{
-                'serial_port': '/dev/ttyUSB0',
-                'serial_baudrate': 115200,
-                'frame_id': 'laser_frame',
-                'angle_compensate': True
-            }],
-            condition=UnlessCondition(LaunchConfiguration('sim'))
+    # rplidar = Node(
+    #         package='rplidar',
+    #         executable='rplidar_node',
+    #         name='rplidar_node',
+    #         output='screen',
+    #         respawn=True,
+    #         respawn_delay=0.1,
+    #         parameters=[{
+    #             'serial_port': '/dev/ttyUSB0',
+    #             'serial_baudrate': 115200,
+    #             'frame_id': 'laser_frame',
+    #             'angle_compensate': True
+    #         }],
+    #         condition=UnlessCondition(LaunchConfiguration('sim'))
+    # )
+
+    ld_lidar = IncludeLaunchDescription(
+        PythonLaunchDescriptionSource([
+            os.path.join(
+                get_package_share_directory('ldlidar_stl_ros2'),  # name of the lidar package
+                'launch',
+                'stl27l.launch.py'
+            )
+        ]),
+        condition=UnlessCondition(LaunchConfiguration('sim'))
     )
 
     # TODO: Add depth cam realsense node with launch condition
@@ -197,10 +208,10 @@ def generate_launch_description() -> LaunchDescription:
     # Run the node
     return LaunchDescription([
         world_arg,
-        node_robot_state_publisher,
-        spawn_entity,
         sim_arg,
         slam_arg,
+        node_robot_state_publisher,
+        spawn_entity,
         gazebo,
         tf2_odom_broadcaster,
         twist_mux,
@@ -208,6 +219,7 @@ def generate_launch_description() -> LaunchDescription:
         slam_toolbox,
         nav2_params_file,
         nav2,
-        rplidar,
+        # rplidar,
+        ld_lidar,
         rviz2,
     ])

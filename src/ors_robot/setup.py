@@ -19,7 +19,6 @@ setup(
         (os.path.join('share', package_name, 'urdf'), glob('urdf/*.urdf')),
         # Include mesh files
         (os.path.join('share', package_name, 'meshes'), glob('meshes/*.STL')),
-        # (os.path.join('share', package_name, 'slamtec_publisher'), glob('../slamtec_publisher/*.py')),
         # Include world files
         (os.path.join('share', package_name, 'worlds'), glob('worlds/*.world')),
         # Include rviz config files
