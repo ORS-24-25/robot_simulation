@@ -11,24 +11,12 @@ Ros Packages:
   Intel Depth Sense
     sudo apt install ros-humble-librealsense2*
     sudo apt install ros-humble-realsense2-*
-    sudo apt install -y ros-humble-irobot-create-msgs
-    sudo apt install -y ros-humble-irobot-create-msgs
   SLAM Toolbox
     sudo apt install ros-humble-slam-toolbox
   NAV2
     sudo apt install ros-humble-navigation2 ros-humble-nav2-bringup
-  iRobot Create 3
-    sudo 
-  Joystick...?
-    sudo
-  Misc. Files
     sudo apt install ros-humble-twist-mux
-  LD LiDAR
-    None required
-
-Jetson:
-  Intel RealSense
-    sudo apt install ros-humble-realsense2-camera
-  Intel librealsense
-    sudo apt-get install librealsense2-utils
-    sudo apt-get install librealsense2-dev
+  iRobot Create 3: [https://iroboteducation.github.io/create3_docs/setup/ubuntu2204/]
+    sudo apt install -y ros-humble-irobot-create-msgs
+    sudo apt install -y build-essential python3-colcon-common-extensions python3-rosdep ros-humble-rmw-cyclonedds-cpp
+    echo "export RMW_IMPLEMENTATION=rmw_fastrtps_cpp" >> ~/.bashrc
