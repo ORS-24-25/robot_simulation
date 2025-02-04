@@ -8,6 +8,8 @@ Undergrad Students: Samir, Emil, Simon
 
 Required Installs
 Ros Packages:
+  sudo apt install ros-humble-librealsense2*
+  sudo apt install ros-humble-realsense2-*
   sudo apt install -y ros-humble-irobot-create-msgs
   sudo apt install -y ros-humble-irobot-create-msgs
   TO DO: Slam, Nav2, ...
@@ -16,3 +18,4 @@ Ros Packages:
 Python
   pip install Adafruit_CircuitPython_RPLIDAR
   pip install numpy
+
