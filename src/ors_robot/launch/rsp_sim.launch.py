@@ -1,5 +1,5 @@
 import os
-from ament_index_python.packages import get_package_share_directory
+from ament_index_python.packages import get_package_share_directory, PackageNotFoundError
 from launch import LaunchDescription
 from launch.actions import IncludeLaunchDescription, DeclareLaunchArgument, RegisterEventHandler, EmitEvent
 from launch.event_handlers import OnProcessExit
@@ -98,22 +98,32 @@ def generate_launch_description() -> LaunchDescription:
         ] # add other parameters here if required
     )
 
-    # Modify launch parameters to check for sim argument
-    gazebo = IncludeLaunchDescription(
-        PythonLaunchDescriptionSource(
-            [os.path.join(get_package_share_directory('gazebo_ros'), 'launch'), '/gazebo.launch.py']
-        ),
-        launch_arguments={'world': LaunchConfiguration('world')}.items(),
-        condition=IfCondition(LaunchConfiguration('sim'))
-    )
+    # Only define Gazebo stuff if 'sim' is true
+    gazebo_includes = []
+    try:
+        # Will throw PackageNotFoundError if gazebo_ros not installed
+        gazebo_ros_dir = get_package_share_directory('gazebo_ros')
 
-    spawn_entity = Node(
-        package='gazebo_ros', executable='spawn_entity.py',
-        arguments=['-topic', 'robot_description',
-                    '-entity', 'ors_robot'],
-        output='screen',
-        condition=IfCondition(LaunchConfiguration('sim'))
-    )
+        gazebo = IncludeLaunchDescription(
+            PythonLaunchDescriptionSource(
+                [os.path.join(gazebo_ros_dir, 'launch', 'gazebo.launch.py')]
+            ),
+            launch_arguments={'world': LaunchConfiguration('world')}.items(),
+            condition=IfCondition(LaunchConfiguration('sim'))
+        )
+
+        spawn_entity = Node(
+            package='gazebo_ros',
+            executable='spawn_entity.py',
+            arguments=['-topic', 'robot_description', '-entity', 'ors_robot'],
+            output='screen',
+            condition=IfCondition(LaunchConfiguration('sim'))
+        )
+
+        gazebo_includes = [gazebo, spawn_entity]
+    except PackageNotFoundError:
+        # Gazebo not installed, so skip
+        pass
 
     # Launch slam_toolbox node
     slam_toolbox = IncludeLaunchDescription(
@@ -163,22 +173,6 @@ def generate_launch_description() -> LaunchDescription:
         arguments=['-d', os.path.join(get_package_share_directory(pkg_name), 'rviz', 'ors_robot.rviz')],
     )
 
-    # rplidar = Node(
-    #         package='rplidar',
-    #         executable='rplidar_node',
-    #         name='rplidar_node',
-    #         output='screen',
-    #         respawn=True,
-    #         respawn_delay=0.1,
-    #         parameters=[{
-    #             'serial_port': '/dev/ttyUSB0',
-    #             'serial_baudrate': 115200,
-    #             'frame_id': 'laser_frame',
-    #             'angle_compensate': True
-    #         }],
-    #         condition=UnlessCondition(LaunchConfiguration('sim'))
-    # )
-
     ld_lidar = IncludeLaunchDescription(
         PythonLaunchDescriptionSource([
             os.path.join(
@@ -189,8 +183,6 @@ def generate_launch_description() -> LaunchDescription:
         ]),
         condition=UnlessCondition(LaunchConfiguration('sim'))
     )
-
-    # TODO: Add depth cam realsense node with launch condition
 
     tf2_odom_broadcaster = Node(
         package='tf2_ros',
@@ -211,15 +203,12 @@ def generate_launch_description() -> LaunchDescription:
         sim_arg,
         slam_arg,
         node_robot_state_publisher,
-        spawn_entity,
-        gazebo,
         tf2_odom_broadcaster,
         twist_mux,
         slam_params_file,
         slam_toolbox,
         nav2_params_file,
         nav2,
-        # rplidar,
         ld_lidar,
         rviz2,
-    ])
+    ] + gazebo_includes)
