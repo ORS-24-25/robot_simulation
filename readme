@@ -8,14 +8,20 @@ Undergrad Students: Samir, Emil, Simon
 
 Required Installs
 Ros Packages:
-  sudo apt install ros-humble-librealsense2*
-  sudo apt install ros-humble-realsense2-*
-  sudo apt install -y ros-humble-irobot-create-msgs
-  sudo apt install -y ros-humble-irobot-create-msgs
-  TO DO: Slam, Nav2, ...
-
-
-Python
-  pip install Adafruit_CircuitPython_RPLIDAR
-  pip install numpy
-
+  Intel Depth Sense
+    sudo apt install ros-humble-librealsense2*
+    sudo apt install ros-humble-realsense2-*
+    sudo apt install -y ros-humble-irobot-create-msgs
+    sudo apt install -y ros-humble-irobot-create-msgs
+  SLAM Toolbox
+    sudo apt install ros-humble-slam-toolbox
+  NAV2
+    sudo apt install ros-humble-navigation2 ros-humble-nav2-bringup
+  iRobot Create 3
+    sudo 
+  Joystick...?
+    sudo
+  Misc. Files
+    sudo apt install ros-humble-twist-mux
+  LD LiDAR
+    None required
