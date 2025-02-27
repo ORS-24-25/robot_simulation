@@ -21,6 +21,7 @@ Ros Packages:
     sudo apt install -y ros-humble-irobot-create-msgs
     sudo apt install -y build-essential python3-colcon-common-extensions python3-rosdep ros-humble-rmw-cyclonedds-cpp
     echo "export RMW_IMPLEMENTATION=rmw_fastrtps_cpp" >> ~/.bashrc
+    echo "export ROS_DOMAIN_ID=35" >> ~/.bashrc
 
 
 Port Setup
