@@ -41,13 +41,13 @@ def generate_launch_description():
       ]
   )
 
-  # # base_link to base_laser tf node
-  # base_link_to_laser_tf_node = Node(
-  #   package='tf2_ros',
-  #   executable='static_transform_publisher',
-  #   name='base_link_to_base_laser_stl27l',
-  #   arguments=['0','0','0.18','0','0','0','base_link','base_laser']
-  # )
+  # base_link to base_laser tf node
+  base_link_to_laser_tf_node = Node(
+    package='tf2_ros',
+    executable='static_transform_publisher',
+    name='base_link_to_base_laser_stl27l',
+    arguments=['0','0','0.18','0','0','0','base_link','laser_frame']
+  )
 
 
   # Define LaunchDescription variable
