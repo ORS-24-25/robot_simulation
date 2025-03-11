@@ -170,7 +170,7 @@ def generate_launch_description() -> LaunchDescription:
         executable='rviz2',
         name='rviz2',
         output='screen',
-        arguments=['-d', os.path.join(get_package_share_directory(pkg_name), 'rviz', 'ors_robot.rviz')],
+        # arguments=['-d', os.path.join(get_package_share_directory(pkg_name), 'rviz', 'ors_robot.rviz')],
     )
 
     ld_lidar = IncludeLaunchDescription(
@@ -184,25 +184,12 @@ def generate_launch_description() -> LaunchDescription:
         condition=UnlessCondition(LaunchConfiguration('sim'))
     )
 
-    tf2_odom_broadcaster = Node(
-        package='tf2_ros',
-        executable='static_transform_publisher',
-        name='odom_to_base_footprint_broadcaster',
-        arguments=[
-            '0', '0', '0',      # x, y, z
-            '0', '0', '0',      # roll, pitch, yaw
-            'odom',
-            'base_link'
-        ],
-        condition=UnlessCondition(LaunchConfiguration('sim'))
-    )
-
     # Run the node
     return LaunchDescription([
         world_arg,
         sim_arg,
         slam_arg,
-        node_robot_state_publisher,
+        # node_robot_state_publisher,
         # tf2_odom_broadcaster,
         twist_mux,
         slam_params_file,
@@ -211,4 +198,6 @@ def generate_launch_description() -> LaunchDescription:
         nav2,
         ld_lidar,
         rviz2,
-    ] + gazebo_includes)
+    ]
+    # + gazebo_includes
+    )
