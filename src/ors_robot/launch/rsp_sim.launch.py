@@ -170,7 +170,7 @@ def generate_launch_description() -> LaunchDescription:
         executable='rviz2',
         name='rviz2',
         output='screen',
-        arguments=['-d', os.path.join(get_package_share_directory(pkg_name), 'rviz', 'ors_robot.rviz')],
+        # arguments=['-d', os.path.join(get_package_share_directory(pkg_name), 'rviz', 'ors_robot.rviz')],
     )
 
     ld_lidar = IncludeLaunchDescription(
