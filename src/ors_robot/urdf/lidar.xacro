@@ -7,7 +7,7 @@
 
     <!-- Add a joint and link to locate LiDar within our robot -->
     <joint name="laser_joint" type="fixed">
-        <parent link="plate"/>
+        <parent link="base_link"/>
         <child link="laser_frame"/>
         <!-- Place origin of laser link at the top of the robot -->
         <origin xyz="0.1 0 0.175" rpy="0 0 0"/>
