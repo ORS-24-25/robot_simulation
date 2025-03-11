@@ -202,7 +202,7 @@ def generate_launch_description() -> LaunchDescription:
         world_arg,
         sim_arg,
         slam_arg,
-        # node_robot_state_publisher,
+        node_robot_state_publisher,
         # tf2_odom_broadcaster,
         twist_mux,
         slam_params_file,
