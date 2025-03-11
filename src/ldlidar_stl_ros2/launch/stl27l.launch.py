@@ -49,21 +49,11 @@ def generate_launch_description():
     arguments=['0','0','0.18','0','0','0','base_link','laser_frame']
   )
 
-  # Add a throttle filter
-  scan_throttle = Node(
-    package='topic_tools',
-    executable='throttle',
-    name='scan_throttler',
-    parameters=[],
-    arguments=['messages', '/scan', '5.0', '/scan_throttled']
-  )
-
 
   # Define LaunchDescription variable
   ld = LaunchDescription()
 
   ld.add_action(ldlidar_node)
   ld.add_action(base_link_to_laser_tf_node)
-  ld.add_action(scan_throttle)
 
   return ld
