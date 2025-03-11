@@ -47,13 +47,11 @@
     type="fixed">
     <origin
       xyz="0.14944 0.0021853 0.012353"
-      rpy="0 0 0" />
-    <parent
-      link="plate" />
-    <child
-      link="depth_cam_link" />
-    <axis
-      xyz="0 0 0" />
+      rpy="0 0 0"
+    />
+    <parent link="plate" />
+    <child link="depth_cam_link" />
+    <axis xyz="0 0 0" />
   </joint>
 
     <joint name="depth_cam_optical_joint" type="fixed">

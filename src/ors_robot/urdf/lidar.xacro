@@ -7,7 +7,7 @@
 
     <!-- Add a joint and link to locate LiDar within our robot -->
     <joint name="laser_joint" type="fixed">
-        <parent link="base_link"/>
+        <parent link="plate"/>
         <child link="laser_frame"/>
         <!-- Place origin of laser link at the top of the robot -->
         <origin xyz="0.1 0 0.175" rpy="0 0 0"/>
@@ -38,19 +38,13 @@
         </inertial>
     </link>
 
-    <!-- Add a gazebo tag to simulate the LiDar -->
+    <!-- 
     <gazebo reference="laser_frame">
-        <!-- Set the color of the LiDar. The color for the link sets color in rviz, not Gazebo -->
         <material>Gazebo/Red</material>
-
-        <!-- Ray sensor is a scanning LiDar -->
         <sensor name="laser" type="ray">
-            <!-- Origin of the sensor is at the center of the link -->
             <pose> 0 0 0 0 0 0 </pose>
             <visualize>false</visualize>
-            <!-- Update 10 times / second -->
             <update_rate>10</update_rate>
-            <!-- Specify paramters for the virtual sensor -->
             <ray>
                 <scan>
                     <horizontal>
@@ -64,17 +58,14 @@
                     <max>12</max>
                 </range>
             </ray>
-            <!-- Plug in to publish the gazebo ray sensor to ROS topics -->
             <plugin name="laser_controller" filename="libgazebo_ros_ray_sensor.so">
-                <!-- What topic to publish onto (publish to scan) -->
                 <ros>
                     <argument>~/out:=scan</argument>
                 </ros>
                 <output_type>sensor_msgs/LaserScan</output_type>
-                <!-- What frame ID to put in the laser scan message -->
                 <frame_name>laser_frame</frame_name>
             </plugin>
         </sensor>
-    </gazebo>
+    </gazebo> -->
 
 </robot>
