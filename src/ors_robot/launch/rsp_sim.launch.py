@@ -170,12 +170,7 @@ def generate_launch_description() -> LaunchDescription:
         executable='rviz2',
         name='rviz2',
         output='screen',
-        arguments=[
-            '-d', os.path.join(get_package_share_directory(pkg_name), 'rviz', 'ors_robot.rviz'),
-            '--ros-args', '-p', 'tf_buffer_cache_time_ns:=10000000000', '-p', 'fixed_frame:=map'
-        ],
-        # Explicitly set publish rate for rviz's tf listener
-        parameters=[{'use_sim_time': LaunchConfiguration('sim'), 'publish_frequency': 10.0}]
+        arguments=['-d', os.path.join(get_package_share_directory(pkg_name), 'rviz', 'ors_robot.rviz')],
     )
 
     ld_lidar = IncludeLaunchDescription(

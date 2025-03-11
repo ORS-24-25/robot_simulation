@@ -1,8 +1,6 @@
 #!/usr/bin/env python3
 from launch import LaunchDescription
 from launch_ros.actions import Node
-from launch.substitutions import LaunchConfiguration
-from launch.actions import DeclareLaunchArgument
 
 '''
 Parameter Description:
@@ -24,13 +22,6 @@ Parameter Description:
 '''
 
 def generate_launch_description():
-  # Add scan throttling parameter
-  scan_rate = DeclareLaunchArgument(
-      'scan_rate',
-      default_value='5.0',
-      description='Rate to throttle scan messages to (Hz)'
-  )
-
   # LDROBOT LiDAR publisher node
   ldlidar_node = Node(
       package='ldlidar_stl_ros2',
@@ -50,14 +41,6 @@ def generate_launch_description():
       ]
   )
 
-  # Add throttle filter
-  scan_throttle = Node(
-      package='topic_tools',
-      executable='throttle',
-      name='scan_throttler',
-      arguments=['messages', '/scan', LaunchConfiguration('scan_rate'), '/scan_throttled']
-  )
-
   # plate to laser_frame tf node
   base_link_to_laser_tf_node = Node(
     package='tf2_ros',
@@ -68,9 +51,9 @@ def generate_launch_description():
 
 
   # Define LaunchDescription variable
-  ld = LaunchDescription([scan_rate])
+  ld = LaunchDescription()
+
   ld.add_action(ldlidar_node)
   ld.add_action(base_link_to_laser_tf_node)
-  ld.add_action(scan_throttle)
 
   return ld
