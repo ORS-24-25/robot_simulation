@@ -23,6 +23,12 @@
   </link>
 
   <!-- Chassis Link -->
+  <joint name="chassis_joint" type="fixed">
+    <parent link="base_link" />
+    <child link="chassis" />
+    <origin xyz="0 0 0.042377"/>
+  </joint>
+
   <link name="chassis">
     <inertial>
       <origin xyz="0.036054 -0.00042371 0.042377" rpy="0 0 0" />
@@ -54,13 +60,16 @@
     </collision>
   </link>
 
-  <joint name="chassis_joint" type="fixed">
+  <!-- Left Wheel Link -->
+  <joint name="left_wheel_joint" type="continuous">
+    <origin xyz="-0.012911 0.11755 0.025329" rpy="-1.5707963267949 1.5707963267949 0" />
     <parent link="base_link" />
-    <child link="chassis" />
-    <origin xyz="0 0 0.042377"/>
+    <child link="left_wheel" />
+    <axis xyz="0 0 1" />
+    <limit effort="10" velocity="10" />
+    <dynamics damping="0.1" friction="0.1" />
   </joint>
 
-  <!-- Left Wheel Link -->
   <link name="left_wheel">
     <inertial>
       <origin xyz="-2.2204E-14 0 1.1102E-16" rpy="0 0 0" />
@@ -84,16 +93,16 @@
     </collision>
   </link>
 
-  <joint name="left_wheel_joint" type="continuous">
-    <origin xyz="-0.012911 0.11755 0.025329" rpy="-1.5707963267949 1.5707963267949 0" />
+  <!-- Right Wheel Link -->
+  <joint name="right_wheel_joint" type="continuous">
+    <origin xyz="-0.012911 -0.11766 0.025329" rpy="-1.5708 0 0" />
     <parent link="base_link" />
-    <child link="left_wheel" />
+    <child link="right_wheel" />
     <axis xyz="0 0 1" />
     <limit effort="10" velocity="10" />
     <dynamics damping="0.1" friction="0.1" />
   </joint>
 
-  <!-- Right Wheel Link -->
   <link name="right_wheel">
     <inertial>
       <origin xyz="-4.8861E-13 0 -1.1102E-16" rpy="0 0 0" />
@@ -120,16 +129,16 @@
     </collision>
   </link>
 
-  <joint name="right_wheel_joint" type="continuous">
-    <origin xyz="-0.012911 -0.11766 0.025329" rpy="-1.5708 0 0" />
+  <!-- Front Wheel Link -->
+  <joint name="front_wheel_joint" type="continuous">
+    <origin xyz="0.11327 5.4824E-05 0.0013288" rpy="0 0 0" />
     <parent link="base_link" />
-    <child link="right_wheel" />
-    <axis xyz="0 0 1" />
+    <child link="front_wheel" />
+    <axis xyz="0 1 0" />
     <limit effort="10" velocity="10" />
-    <dynamics damping="0.1" friction="0.1" />
+    <dynamics damping="0" friction="0" />
   </joint>
 
-  <!-- Front Wheel Link -->
   <link name="front_wheel">
     <inertial>
       <origin xyz="0 1.1102E-16 -2.7756E-17" rpy="0 0 0" />
@@ -153,16 +162,14 @@
     </collision>
   </link>
 
-  <joint name="front_wheel_joint" type="continuous">
-    <origin xyz="0.11327 5.4824E-05 0.0013288" rpy="0 0 0" />
+  <!-- Plate Link -->
+  <joint name="plate_joint" type="fixed">
+    <origin xyz="-0.012717 3.0744E-05 0.23383" rpy="0 0 0" />
     <parent link="base_link" />
-    <child link="front_wheel" />
-    <axis xyz="0 1 0" />
-    <limit effort="10" velocity="10" />
-    <dynamics damping="0" friction="0" />
+    <child link="plate" />
+    <axis xyz="0 0 0" />
   </joint>
 
-  <!-- Plate Link -->
   <link name="plate">
     <inertial>
       <origin xyz="8.77742323268649E-13 -4.02533781196368E-07 -0.00402127109268191" rpy="0 0 0" />
@@ -185,12 +192,5 @@
       </geometry>
     </collision>
   </link>
-
-  <joint name="plate" type="fixed">
-    <origin xyz="-0.012717 3.0744E-05 0.23383" rpy="0 0 0" />
-    <parent link="base_link" />
-    <child link="plate" />
-    <axis xyz="0 0 0" />
-  </joint>
 
 </robot>

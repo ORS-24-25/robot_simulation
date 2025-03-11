@@ -25,17 +25,17 @@
                 <cylinder radius="0.05" length="0.05"/>
             </geometry>
         </collision>
-      <inertial>
-          <mass value="0.1"/>
-          <inertia 
-              ixx="0.000016" 
-              ixy="0" 
-              ixz="0" 
-              iyy="0.000016" 
-              iyz="0" 
-              izz="0.000025"/>
-          <origin xyz="0 0 0" rpy="0 0 0"/>
-      </inertial>
+        <inertial>
+            <mass value="0.1"/>
+            <inertia 
+                ixx="0.000016" 
+                ixy="0" 
+                ixz="0" 
+                iyy="0.000016" 
+                iyz="0" 
+                izz="0.000025"/>
+            <origin xyz="0 0 0" rpy="0 0 0"/>
+        </inertial>
     </link>
 
     <!-- Add a gazebo tag to simulate the LiDar -->
