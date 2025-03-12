@@ -26,14 +26,13 @@ def generate_launch_description():
         executable='async_slam_toolbox_node',
         name='slam_toolbox',
         output='screen',
-        # Remappings only necessary for namespaces
-        # remappings = [
-        #     ('/tf', 'tf'),
-        #     ('/tf_static', 'tf_static'),
-        #     ('/scan', 'scan'),
-        #     ('/map', 'map'),
-        #     ('/map_metadata', 'map_metadata')
-        # ]
+        remappings = [
+            ('/tf', 'tf'),
+            ('/tf_static', 'tf_static'),
+            ('/scan', 'scan'),
+            ('/map', 'map'),
+            ('/map_metadata', 'map_metadata')
+        ]
     )
 
     ld = LaunchDescription()
