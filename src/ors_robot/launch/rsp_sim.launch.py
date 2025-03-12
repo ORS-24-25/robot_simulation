@@ -47,6 +47,13 @@ def generate_launch_description() -> LaunchDescription:
     pkg_name = 'ors_robot'
     file_subpath = 'urdf/robot.urdf.xacro'
 
+    # Add gazebo world launch argument
+    world_arg = DeclareLaunchArgument(
+        'world', 
+        default_value='src/ors_robot/worlds/test.world',
+        description='Gazebo world file',
+    )
+
     # Add sim launch argument
     sim_arg = DeclareLaunchArgument(
         'sim', 
@@ -58,13 +65,6 @@ def generate_launch_description() -> LaunchDescription:
         'slam_mode',
         default_value='localization',
         description='Set slam_toolbox mode (mapping/localization)',
-    )
-
-    # Add gazebo world launch argument
-    world_arg = DeclareLaunchArgument(
-        'world', 
-        default_value='src/ors_robot/worlds/test.world',
-        description='Gazebo world file',
     )
 
     # Add slam_params_file arg for slam_toolbox
@@ -125,6 +125,18 @@ def generate_launch_description() -> LaunchDescription:
         # Gazebo not installed, so skip
         pass
 
+    # Twist mux node
+    twist_mux = Node(
+        package='twist_mux',
+        executable='twist_mux',
+        name='twist_mux',
+        output='screen',
+        parameters=[{
+            'params_file': os.path.join(get_package_share_directory(pkg_name), 'config', 'twist_mux.yaml'),
+            'use_sim_time': LaunchConfiguration('sim')
+        }]
+    )
+
     # Launch slam_toolbox node
     slam_toolbox = IncludeLaunchDescription(
         PythonLaunchDescriptionSource([
@@ -136,18 +148,6 @@ def generate_launch_description() -> LaunchDescription:
             'use_sim_time': LaunchConfiguration('sim'),
             'mode': LaunchConfiguration('slam_mode')
         }.items()
-    )
-
-    # Twist mux node
-    twist_mux = Node(
-        package='twist_mux',
-        executable='twist_mux',
-        name='twist_mux',
-        output='screen',
-        parameters=[{
-            'params_file': os.path.join(get_package_share_directory(pkg_name), 'config', 'twist_mux.yaml'),
-            'use_sim_time': LaunchConfiguration('sim')
-        }]
     )
 
     # Launch nav2 node
@@ -164,15 +164,6 @@ def generate_launch_description() -> LaunchDescription:
         )
     )
 
-    # Launch rviz2 node configured to check laser scan data
-    rviz2 = Node(
-        package='rviz2',
-        executable='rviz2',
-        name='rviz2',
-        output='screen',
-        # arguments=['-d', os.path.join(get_package_share_directory(pkg_name), 'rviz', 'ors_robot.rviz')],
-    )
-
     ld_lidar = IncludeLaunchDescription(
         PythonLaunchDescriptionSource([
             os.path.join(
@@ -184,6 +175,15 @@ def generate_launch_description() -> LaunchDescription:
         condition=UnlessCondition(LaunchConfiguration('sim'))
     )
 
+    # Launch rviz2 node configured to check laser scan data
+    rviz2 = Node(
+        package='rviz2',
+        executable='rviz2',
+        name='rviz2',
+        output='screen',
+        # arguments=['-d', os.path.join(get_package_share_directory(pkg_name), 'rviz', 'ors_robot.rviz')],
+    )
+
     # Run the node
     return LaunchDescription([
         world_arg,
@@ -193,8 +193,8 @@ def generate_launch_description() -> LaunchDescription:
         # tf2_odom_broadcaster,
         twist_mux,
         slam_params_file,
-        slam_toolbox,
         nav2_params_file,
+        slam_toolbox,
         nav2,
         ld_lidar,
         rviz2,
