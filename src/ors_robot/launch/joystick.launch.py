@@ -25,13 +25,15 @@ def generate_launch_description():
             # remappings=[('/cmd_vel','/cmd_vel_joy')]
         )
 
+    # This and twist mux is only needed for sim, ignore for now
     # twist_stamper = Node(
     #         package='twist_stamper',
     #         executable='twist_stamper',
     #         parameters=[{'use_sim_time': use_sim_time}],
-    #         remappings=[('/cmd_vel_in','/diff_cont/cmd_vel_unstamped'),
-    #                     ('/cmd_vel_out','/diff_cont/cmd_vel')]
-    #      )
+    #         remappings=[('/cmd_vel','/diff_cont/cmd_vel_unstamped'),
+    #                     # ('/cmd_vel_out','/diff_cont/cmd_vel')
+    #                     ]
+    #     )
 
 
     return LaunchDescription([
