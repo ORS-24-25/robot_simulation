@@ -1,6 +1,7 @@
 #!/usr/bin/env python3
 from launch import LaunchDescription
 from launch_ros.actions import Node
+from launch.actions import TimerAction
 
 '''
 Parameter Description:
@@ -42,18 +43,18 @@ def generate_launch_description():
   )
 
   # plate to laser_frame tf node
-  base_link_to_laser_tf_node = Node(
+  static_transform_node = Node(
     package='tf2_ros',
     executable='static_transform_publisher',
     name='base_link_to_base_laser_stl27l',
-    arguments=['0','0','0.18','0','0','0','base_link','laser_frame']
+    arguments=['0','0','0.18','0','0','0','base_footprint','laser_frame']
   )
 
-
-  # Define LaunchDescription variable
-  ld = LaunchDescription()
-
-  ld.add_action(ldlidar_node)
-  ld.add_action(base_link_to_laser_tf_node)
-
-  return ld
+  # Launch with a timer between transform and ldlidar_node
+  return LaunchDescription([
+      static_transform_node,
+      TimerAction(
+          period=2.0,
+          actions=[ldlidar_node]
+      )
+  ])
