@@ -24,15 +24,27 @@ Parameter Description:
 '''
 
 def generate_launch_description():
-    # Evaluate at launch the value of the launch configuration 'namespace'
     namespace = LaunchConfiguration('namespace')
 
-    # Declares an action to allow users to pass the robot namespace from the
-    # CLI into the launch description as an argument.
     namespace_argument = DeclareLaunchArgument(
         'namespace',
         default_value='/ors_irobot',
         description='Robot namespace'
+    )
+
+    # Create laser_frame static transform
+    static_transform_node = Node(
+        package='tf2_ros',
+        executable='static_transform_publisher',
+        arguments=['0','0','0.18','0','0','0','base_footprint','laser_frame'],
+
+        # Remaps topics used by the 'tf2_ros' package from absolute (with slash) to relative (no slash).
+        # This is necessary to use namespaces with 'tf2_ros'.
+        remappings=[
+            ('/tf_static', 'tf_static'),
+            ('/tf', 'tf')
+        ],
+        namespace=namespace
     )
 
     # LDROBOT LiDAR publisher node
@@ -53,14 +65,6 @@ def generate_launch_description():
             {'angle_crop_max': 0.0}
         ],
         namespace=namespace
-    )
-
-    # plate to laser_frame tf node
-    static_transform_node = Node(
-        package='tf2_ros',
-        executable='static_transform_publisher',
-        name='base_link_to_base_laser_stl27l',
-        arguments=['0','0','0.18','0','0','0','base_footprint','laser_frame']
     )
 
     # Launch with a timer between transform and ldlidar_node
