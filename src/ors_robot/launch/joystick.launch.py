@@ -8,6 +8,19 @@ from ament_index_python.packages import get_package_share_directory
 
 def generate_launch_description():
     use_sim_time = LaunchConfiguration('use_sim_time')
+    namespace = LaunchConfiguration('namespace')
+
+    use_sim_time_argument = DeclareLaunchArgument(
+        'use_sim_time',
+        default_value='false',
+        description='Use sim time if true'
+    )
+
+    namespace_argument = DeclareLaunchArgument(
+        'namespace', 
+        default_value='/ors_irobot',
+        description='Robot namespace'
+    )
 
     joy_params = os.path.join(get_package_share_directory('ors_robot'),'config','joystick.yaml')
 
@@ -22,7 +35,8 @@ def generate_launch_description():
             executable='teleop_node',
             name='teleop_node',
             parameters=[joy_params, {'use_sim_time': use_sim_time}],
-            # remappings=[('/cmd_vel','/cmd_vel_joy')]
+            # remappings=[('/cmd_vel','/cmd_vel_joy')],
+            namespace=namespace
         )
 
     # twist_stamper = Node(
@@ -35,6 +49,8 @@ def generate_launch_description():
 
 
     return LaunchDescription([
+        use_sim_time_argument,
+        namespace_argument,
         DeclareLaunchArgument(
             'use_sim_time',
             default_value='false',

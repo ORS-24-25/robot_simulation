@@ -13,16 +13,12 @@ def generate_launch_description():
     rviz2_config = PathJoinSubstitution(
         [lidar_pkg, 'rviz', 'ors_robot.rviz'])
 
-    # Dont need this for just one robot
-    # # Evaluate at launch the value of the launch configuration 'namespace' 
-    # namespace = LaunchConfiguration('namespace')
+    namespace = LaunchConfiguration('namespace')
 
-    # # Declares an action to allow users to pass the robot namespace from the 
-    # # CLI into the launch description as an argument.
-    # namespace_argument = DeclareLaunchArgument(
-    #     'namespace', 
-    #     default_value='',
-    #     description='Robot namespace')
+    namespace_argument = DeclareLaunchArgument(
+        'namespace', 
+        default_value='/ors_irobot',
+        description='Robot namespace')
 
     # Declares an action that will launch a node when executed by the launch description.
     # This node is responsible for configuring and running rviz2.   
@@ -31,19 +27,18 @@ def generate_launch_description():
         executable='rviz2',
         # -d flag tells rviz2 to load a configuration file
         arguments=['-d', rviz2_config],
-        # Remappings not required for one robot
-        # # Remaps topics used by the 'rviz2' package from absolute (with slash) to relative (no slash).
-        # remappings=[
-        #     ('/tf_static', 'tf_static'),
-        #     ('/tf', 'tf')],
-        # # namespace=namespace,
+        # Remaps topics used by the 'rviz2' package from absolute (with slash) to relative (no slash).
+        remappings=[
+            ('/tf_static', 'tf_static'),
+            ('/tf', 'tf')],
+        namespace=namespace,
         output='screen'
         )
 
     
     ld = LaunchDescription()
 
-    # ld.add_action(namespace_argument)
+    ld.add_action(namespace_argument)
     ld.add_action(rviz_node)
 
     # Launches all named actions

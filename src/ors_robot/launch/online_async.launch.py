@@ -19,16 +19,12 @@ def generate_launch_description():
         default_value='false',
         description='Use simulation/Gazebo clock')
 
-    # Not required for one robot
-    # # Evaluate at launch the value of the launch configuration 'namespace' 
-    # namespace = LaunchConfiguration('namespace')
+    namespace = LaunchConfiguration('namespace')
 
-    # # Declares an action to allow users to pass the robot namespace from the 
-    # # CLI into the launch description as an argument.
-    # namespace_argument = DeclareLaunchArgument(
-    #     'namespace', 
-    #     default_value='',
-    #     description='Robot namespace')
+    namespace_argument = DeclareLaunchArgument(
+        'namespace', 
+        default_value='/ors_irobot',
+        description='Robot namespace')
     
     # Declares an action that will launch a node when executed by the launch description.
     # This node is responsible for configuring and running slam toolbox.  
@@ -42,20 +38,20 @@ def generate_launch_description():
         name='slam_toolbox',
         output='screen',
         # Not required for one robot
-        # namespace=namespace,
-        # # Remaps topics used by the 'slam_toolbox' package from absolute (with slash) to relative (no slash).
-        # # This is necessary to use namespaces with 'slam_toolbox'.
-        # remappings = [
-        # ('/tf', 'tf'),
-        # ('/tf_static', 'tf_static'),
-        # ('/scan', 'scan'),
-        # ('/map', 'map'),
-        # ('/map_metadata', 'map_metadata')
-        # ]
+        namespace=namespace,
+        # Remaps topics used by the 'slam_toolbox' package from absolute (with slash) to relative (no slash).
+        # This is necessary to use namespaces with 'slam_toolbox'.
+        remappings = [
+            ('/tf', 'tf'),
+            ('/tf_static', 'tf_static'),
+            ('/scan', 'scan'),
+            ('/map', 'map'),
+            ('/map_metadata', 'map_metadata')
+        ]
     )
 
     return LaunchDescription([
         declare_use_sim_time_argument,
-        # namespace_argument,
+        namespace_argument,
         start_async_slam_toolbox_node
     ])
