@@ -9,15 +9,24 @@ from ament_index_python.packages import get_package_share_directory
 
 
 def generate_launch_description():
+    use_sim_time = LaunchConfiguration('use_sim_time')
+
+    declare_use_sim_time_argument = DeclareLaunchArgument(
+        'use_sim_time',
+        default_value='false',
+        description='Use simulation/Gazebo clock'
+    )
+
     start_async_slam_toolbox_node = Node(
         parameters=[
             get_package_share_directory("ors_robot") + '/config/mapper_params_online_async.yaml',
-            {'use_sim_time': False}
+            {'use_sim_time': use_sim_time}
         ],
         package='slam_toolbox',
         executable='async_slam_toolbox_node',
         name='slam_toolbox',
         output='screen',
+        # Remappings only necessary for namespaces
         # remappings = [
         #     ('/tf', 'tf'),
         #     ('/tf_static', 'tf_static'),
@@ -29,7 +38,7 @@ def generate_launch_description():
 
     ld = LaunchDescription()
 
-    # ld.add_action(declare_use_sim_time_argument)
+    ld.add_action(declare_use_sim_time_argument)
     # ld.add_action(namespace_argument)
     ld.add_action(start_async_slam_toolbox_node)
 
