@@ -16,6 +16,13 @@ def generate_launch_description():
         description='Use simulation/Gazebo clock'
     )
 
+    # Add nav2_params arg for nav2
+    nav2_params_file = DeclareLaunchArgument(
+        'nav2_params_file',
+        default_value='src/ors_robot/config/nav2_params.yaml',
+        description='Path to the ROS2 parameters file for the Nav2 stack',
+    )
+
     # Launch nav2 node
     nav2_node = IncludeLaunchDescription(
         PythonLaunchDescriptionSource([
@@ -29,6 +36,7 @@ def generate_launch_description():
 
     ld = LaunchDescription()
 
+    ld.add_action(nav2_params_file)
     ld.add_action(declare_use_sim_time_argument)
     ld.add_action(nav2_node)
 
