@@ -44,7 +44,7 @@ def generate_launch_description():
             {'robot_namespace': robot_ns}
         ],
         package='ors_robot',
-        executable='create3_republisher',
+        executable='create3_republisher.launch.py',
         name='create3_repub',
         output='screen',
         namespace=republisher_ns,
