@@ -1,59 +1,29 @@
-#!/usr/bin/env python3
-# Copyright 2024 iRobot Corporation. All Rights Reserved.
+# Sample code for a broadcaster node
+import rclpy
+from rclpy.node import Node
+from nav_msgs.msg import Odometry
+from geometry_msgs.msg import TransformStamped
+import tf2_ros
 
-# Copied from create3 and modified
+class OdomTFBroadcaster(Node):
+    def __init__(self):
+        super().__init__('odom_tf_broadcaster')
+        self.subscription = self.create_subscription(
+            Odometry,
+            '/odom',  # The republished odom topic
+            self.odom_callback,
+            10)
+        self.tf_broadcaster = tf2_ros.TransformBroadcaster(self)
 
-import os
-
-from launch import LaunchDescription
-from launch.actions import DeclareLaunchArgument
-from launch.substitutions import LaunchConfiguration
-from launch_ros.actions import Node
-from ament_index_python.packages import get_package_share_directory
-
-
-def generate_launch_description():
-
-    # Fast-DDS env variable check
-    rmw_impl_env_var = "RMW_IMPLEMENTATION"
-    fastdds_config_env_var = "FASTRTPS_DEFAULT_PROFILES_FILE"
-
-    if rmw_impl_env_var in os.environ:
-        print("RMW IMPLEMENTATION: ", os.environ[rmw_impl_env_var])
-    if fastdds_config_env_var in os.environ:
-        print("FAST-DDS CONFIG FILE: ", os.environ[fastdds_config_env_var])
-
-    republisher_ns = LaunchConfiguration('republisher_ns')
-    republisher_ns_argument = DeclareLaunchArgument(
-        'republisher_ns', 
-        default_value='/',
-        description='Republisher namespace')
-    
-    robot_ns = LaunchConfiguration('robot_ns')
-    robot_ns_argument = DeclareLaunchArgument(
-        'robot_ns', 
-        default_value='/ors_irobot',
-        description='Create 3 robot namespace')
-
-    params_yaml_file = get_package_share_directory("ors_robot") + '/config/create3_republisher_params.yaml'
-    print("Using yaml file ", params_yaml_file)
-
-    start_republisher_node = Node(
-        parameters=[
-            params_yaml_file,
-            {'robot_namespace': robot_ns}
-        ],
-        package='ors_robot',
-        executable='create3_republisher.launch.py',
-        name='create3_repub',
-        output='screen',
-        namespace=republisher_ns,
-    )
-
-    ld = LaunchDescription()
-
-    ld.add_action(republisher_ns_argument)
-    ld.add_action(robot_ns_argument)
-    ld.add_action(start_republisher_node)
-
-    return ld
+    def odom_callback(self, msg):
+        t = TransformStamped()
+        t.header = msg.header
+        # Make sure odom frame_id is set correctly
+        t.header.frame_id = 'odom'
+        # This should be your robot's base frame
+        t.child_frame_id = 'base_link'  
+        t.transform.translation.x = msg.pose.pose.position.x
+        t.transform.translation.y = msg.pose.pose.position.y
+        t.transform.translation.z = msg.pose.pose.position.z
+        t.transform.rotation = msg.pose.pose.orientation
+        self.tf_broadcaster.sendTransform(t)
