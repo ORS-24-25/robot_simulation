@@ -187,7 +187,7 @@ def generate_launch_description() -> LaunchDescription:
     tf2_odom_broadcaster = Node(
         package='tf2_ros',
         executable='static_transform_publisher',
-        name='odom_to_base_footprint_broadcaster',
+        # name='odom_to_base_footprint_broadcaster',
         arguments=[
             '0', '0', '0',      # x, y, z
             '0', '0', '0',      # roll, pitch, yaw
@@ -198,17 +198,20 @@ def generate_launch_description() -> LaunchDescription:
     )
 
     # Run the node
-    return LaunchDescription([
-        world_arg,
-        sim_arg,
-        slam_arg,
-        node_robot_state_publisher,
-        tf2_odom_broadcaster,
-        twist_mux,
-        slam_params_file,
-        slam_toolbox,
-        nav2_params_file,
-        nav2,
-        ld_lidar,
-        rviz2,
-    ] + gazebo_includes)
+    return LaunchDescription(
+        [
+            world_arg,
+            sim_arg,
+            # slam_arg,
+            node_robot_state_publisher,
+            tf2_odom_broadcaster,
+            twist_mux,
+            # slam_params_file,
+            # slam_toolbox,
+            # nav2_params_file,
+            # nav2,
+            # ld_lidar,
+            # rviz2,
+        ]
+        # + gazebo_includes
+    )

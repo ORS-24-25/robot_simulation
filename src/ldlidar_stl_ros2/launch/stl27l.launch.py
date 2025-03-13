@@ -45,7 +45,7 @@ def generate_launch_description():
     static_transform_node = Node(
         package='tf2_ros',
         executable='static_transform_publisher',
-        arguments=['0','0','0.18','0','0','0','base_link','laser_frame']
+        arguments=['0','0','0.18','0','0','0','plate','laser_frame']
     )
 
 
