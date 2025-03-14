@@ -21,7 +21,8 @@ def generate_launch_description():
         executable='rviz2',
         name='rviz2',
         arguments=['-d', rviz2_config],
-        output='screen'
+        output='screen',
+        namespace='/ors_irobot',
         )
 
     return LaunchDescription([

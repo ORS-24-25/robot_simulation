@@ -16,11 +16,11 @@ def generate_launch_description():
         description='Use simulation/Gazebo clock'
     )
 
-    namespace = LaunchConfiguration('namespace')
-    namespace_argument = DeclareLaunchArgument(
-        'namespace', 
-        default_value='',
-        description='Robot namespace')
+    # namespace = LaunchConfiguration('namespace')
+    # namespace_argument = DeclareLaunchArgument(
+    #     'namespace', 
+    #     default_value='',
+    #     description='Robot namespace')
 
     start_async_slam_toolbox_node = Node(
         parameters=[
@@ -39,13 +39,13 @@ def generate_launch_description():
         #     ('/map', 'map'),
         #     ('/map_metadata', 'map_metadata')
         # ],
-        namespace=namespace
+        namespace='/ors_irobot',
     )
 
     ld = LaunchDescription()
 
     ld.add_action(declare_use_sim_time_argument)
-    ld.add_action(namespace_argument)
+    # ld.add_action(namespace_argument)
     ld.add_action(start_async_slam_toolbox_node)
 
     # Launches all named actions
