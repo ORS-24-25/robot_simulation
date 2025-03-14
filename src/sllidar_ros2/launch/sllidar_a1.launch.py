@@ -71,5 +71,18 @@ def generate_launch_description():
             output='screen',
             namespace='/ors_irobot',
         ),
+
+        Node(
+            package='tf2_ros',
+            executable='static_transform_publisher',
+            arguments=['-0.012', '0', '0.144', '0', '0', '0', 'base_footprint', 'laser_frame'],
+            # Remaps topics used by the 'tf2_ros' package from absolute (with slash) to relative (no slash).
+            # This is necessary to use namespaces with 'tf2_ros'.
+            remappings=[
+                ('/tf_static', 'tf_static'),
+                ('/tf', 'tf')],
+            output='screen',
+            namespace='/ors_irobot',
+        ),
     ])
 
