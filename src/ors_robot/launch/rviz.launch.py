@@ -10,7 +10,7 @@ from ament_index_python.packages import get_package_share_directory
 
 def generate_launch_description():
     # Gets the directory of the package and stores it as 'lidar_pkg'
-    lidar_pkg = get_package_share_directory('create3_lidar_slam')
+    lidar_pkg = get_package_share_directory('ors_robot')
 
     # Generate the path to the rviz configuration file
     rviz2_config = PathJoinSubstitution(
