@@ -15,6 +15,7 @@ def generate_launch_description():
             package='joy',
             executable='joy_node',
             parameters=[joy_params, {'use_sim_time': use_sim_time}],
+            namespace='/ors_irobot',
         )
 
     teleop_node = Node(
