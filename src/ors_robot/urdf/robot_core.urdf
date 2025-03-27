@@ -187,7 +187,7 @@
   </link>
 
   <joint name="plate" type="fixed">
-    <origin xyz="-0.012717 3.0744E-05 0.23383" rpy="0 0 0" />
+    <origin xyz="-0.012717 3.0744E-05 0.27492297775729" rpy="0 0 0" />
     <parent link="base_link" />
     <child link="plate" />
     <axis xyz="0 0 0" />

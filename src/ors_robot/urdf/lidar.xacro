@@ -1,8 +1,8 @@
 <?xml version="1.0"?>
 <robot xmlns:xacro="http://www.ros.org/wiki/xacro"  name="robot">
-    <!-- Define material 'red' -->
-    <material name="red">
-        <color rgba="1 0 0 1"/>
+    <!-- Define material 'grey' -->
+    <material name="grey">
+        <color rgba="0.7 0.7 0.7 1"/>
     </material>
 
     <!-- Add a joint and link to locate LiDar within our robot -->
@@ -10,7 +10,7 @@
         <parent link="plate"/>
         <child link="laser_frame"/>
         <!-- Place origin of laser link at the top of the robot -->
-        <origin xyz="0.1 0 0.175" rpy="0 0 0"/>
+        <origin xyz="0 0 0.06" rpy="0 0 0"/>
     </joint>
 
     <link name="laser_frame">
