@@ -63,7 +63,7 @@ def generate_launch_description() -> LaunchDescription:
     # Add gazebo world launch argument
     world_arg = DeclareLaunchArgument(
         'world', 
-        default_value='src/ors_robot/worlds/test.world',
+        default_value='src/ors_robot/worlds/video.world',
         description='Gazebo world file',
     )
 
