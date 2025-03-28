@@ -127,7 +127,7 @@ class DepthCameraProcessor(Node):
                 {
                     "role": "user",
                     "content": [
-                        { "type": "text", "text": "what's in this image?" },
+                        { "type": "text", "text": "Please provide a detailed description of the scene in the image. Your description should: 1.	Identify and describe the key objects present. 2.	Explain the spatial relationships between these objects (e.g., \"the table is to the left of the chair,\" \"the lamp is on the table\"). 3.	Infer any potential points of interest in the scene (e.g., \"the open doorway might lead to another room,\" \"the collection of books on the shelf suggests a reading area\"). 4.	Predict possible actions that could be taken in the scene by a person or a robot (e.g., \"a person could sit in the chair,\" \"the robot could navigate to the table to pick up an object\")." },
                         {
                             "type": "image_url",
                             "image_url": {
